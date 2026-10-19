@@ -3,6 +3,6 @@
     <Project Path="src/EdiIngestConsole/EdiIngestConsole.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/EdiIngest.Tests/EdiIngest.Tests.csproj" />
+    <Project Path="tests/EdiIngestConsoleTests/EdiIngestConsoleTests.csproj" Id="70c9930d-959c-461c-b6dd-ddb4d26fdf9c" />
   </Folder>
 </Solution>

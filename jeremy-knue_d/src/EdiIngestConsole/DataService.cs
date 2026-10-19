@@ -11,8 +11,9 @@ public class DataService(EdiDbContext dbContext) : IDataService
     {
         if (ediItems is null || !ediItems.Any())
             return 0;
-
-        await dbContext.Database.MigrateAsync();
+      
+        if (dbContext.Database is not null)
+            await dbContext.Database.MigrateAsync();
 
         foreach (var item in ediItems)
         {
