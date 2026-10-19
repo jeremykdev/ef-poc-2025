@@ -1,5 +1,6 @@
 ﻿using DotNetEnv;
 using EdiIngestConsole;
+using Microsoft.Extensions.DependencyInjection;
 
 
 internal class Program
@@ -10,9 +11,14 @@ internal class Program
 
         Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
 
+        // setup dependency injection
+        ServiceCollection services = new();
+        services.AddTransient<IEdiParser, EdiParser>();
+
+        var provider = services.BuildServiceProvider();
 
 
-        EdiParser parser = new();
+        IEdiParser parser = provider.GetService<IEdiParser>();
 
 
         var result = parser.ParseFile("837.txt");

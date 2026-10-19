@@ -10,7 +10,7 @@ using System.Text;
 
 namespace EdiIngestConsole;
 
-public class EdiParser
+public class EdiParser : IEdiParser
 {
 	protected string? licenseKey;
 
@@ -44,4 +44,10 @@ public class EdiParser
 
         return ediItems;
     }
+}
+
+
+public interface IEdiParser
+{
+    List<IEdiItem> ParseFile(string filename);
 }
