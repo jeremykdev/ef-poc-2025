@@ -1,6 +1,5 @@
 ﻿using DotNetEnv;
 using EdiIngestConsole;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -8,7 +7,7 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
-        DotNetEnv.Env.Load();
+        Env.Load();
 
         Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
 
@@ -16,16 +15,12 @@ internal class Program
         ServiceCollection services = new();
         services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
         services.AddTransient<IEdiParser, EdiParser>();
-        services.AddTransient<IDataService, DataService>(); 
-
-         
+        services.AddTransient<IDataService, DataService>();         
 
         var provider = services.BuildServiceProvider();
 
-
         IEdiParser parser = provider.GetService<IEdiParser>()!;
         IDataService dataService = provider.GetService<IDataService>()!;
-
 
         var result = parser.ParseFile("837.txt");
 
