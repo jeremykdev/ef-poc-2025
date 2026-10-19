@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EdiIngest/EdiIngest.csproj" />
+    <Project Path="src/EdiIngestConsole/EdiIngestConsole.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EdiIngest.Tests/EdiIngest.Tests.csproj" />
+  </Folder>
+</Solution>
