@@ -21,6 +21,43 @@ namespace EdiIngestConsole.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EdiIngestConsole.Models.GsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodeIdentifyingInformationType_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Date_4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GroupControlNumber_6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverIDCode_3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderIDCode_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Time_5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionTypeCode_7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VersionAndRelease_8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Gs");
+                });
+
             modelBuilder.Entity("EdiIngestConsole.Models.IsaEntity", b =>
                 {
                     b.Property<int>("Id")

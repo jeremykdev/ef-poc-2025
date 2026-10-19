@@ -1,7 +1,5 @@
-﻿using System;
+﻿using EdiFabric.Core.Model.Edi.X12;
 using System.ComponentModel.DataAnnotations.Schema;
-using EdiFabric.Core.Model.Edi.X12;
-using Microsoft.EntityFrameworkCore;
 
 namespace EdiIngestConsole.Models;
 

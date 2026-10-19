@@ -24,8 +24,14 @@ public class DataService(EdiDbContext dbContext) : IDataService
         {
             if (item is ISA)
             {
-                var isaEntity = new IsaEntity(item as ISA);
+                IsaEntity isaEntity = new (item as ISA);
                 dbContext.Add(isaEntity);
+            }
+
+            if (item is GS)
+            {
+                GsEntity gsEntity = new (item as GS);
+                dbContext.Add(gsEntity);
             }
         }
 

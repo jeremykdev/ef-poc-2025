@@ -23,6 +23,7 @@ public class EdiDbContext : DbContext, IEdiDbContext
 
     public DbSet<IsaEntity> IsaEntities { get; set; }
 
+    public DbSet<GsEntity> GsEntities { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
