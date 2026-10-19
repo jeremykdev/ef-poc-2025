@@ -14,16 +14,9 @@ internal class Program
 
         // setup dependency injection
         ServiceCollection services = new();
-
-
-        // setup database connection
-        string connString = Environment.GetEnvironmentVariable("SQL_CONN")!;
-        services.AddDbContext<EdiDbContext>(options => options.UseSqlServer(connString));
-
-
-        services.AddTransient<EdiDbContext>();
+        services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
         services.AddTransient<IEdiParser, EdiParser>();
-        services.AddTransient<IDataService, DataService>();
+        services.AddTransient<IDataService, DataService>(); 
 
          
 
