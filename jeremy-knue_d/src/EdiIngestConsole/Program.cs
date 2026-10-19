@@ -1,19 +1,19 @@
 ﻿using DotNetEnv;
 using EdiIngestConsole;
 
- 
+
 internal class Program
 {
     static void Main(string[] args)
-    { 
+    {
         DotNetEnv.Env.Load();
 
-       Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
+        Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
 
-       
+
 
         EdiParser parser = new();
- 
+
 
         var result = parser.ParseFile("837.txt");
 
@@ -28,8 +28,8 @@ internal class Program
             }
         }
 
-       Console.WriteLine("Press enter to exit.");
+        Console.WriteLine("Press any key to exit.");
 
-       Console.ReadLine();
+        Console.ReadKey();
     }
 }
