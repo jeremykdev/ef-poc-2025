@@ -1,7 +1,6 @@
 ﻿using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.X12;
 using EdiFabric.Templates.Hipaa5010;
-using EdiIngestConsole.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,17 +26,15 @@ public class DataService(EdiDbContext dbContext) : IDataService
             if (item is null)
                 continue;
 
-            if (item is ISA)
-            {
-                IsaEntity isaEntity = new (item as ISA);
-                dbContext.Add(isaEntity);
-            }
+           
 
-            if (item is GS)
-            {
-                GsEntity gsEntity = new (item as GS);
-                dbContext.Add(gsEntity);
-            }
+            if (item is ISA)
+                dbContext.Add((item as ISA)!);
+            
+
+            if (item is GS)         
+                dbContext.Add((item as GS)!);
+            
 
             if (item is TS837P)
                 dbContext.Add((item as TS837P)!);
