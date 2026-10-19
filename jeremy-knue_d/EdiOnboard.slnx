@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/EdiIngest/EdiIngest.csproj" />
     <Project Path="src/EdiIngestConsole/EdiIngestConsole.csproj" />
   </Folder>
   <Folder Name="/tests/">
