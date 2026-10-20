@@ -46,7 +46,9 @@ internal class Program
             Console.WriteLine("Preparing to save data");
             int count = await dataService!.SaveItems(result);
 
-            Console.WriteLine($"Number of items saved: {count}");            
+            Console.WriteLine($"Number of items saved: {count}");     
+            
+            // TODO: move file, consider refactor of dataservice to return result that indicates success 
         }
 
         Console.WriteLine("Press any key to exit.");
