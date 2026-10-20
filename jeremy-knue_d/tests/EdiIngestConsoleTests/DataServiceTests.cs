@@ -3,18 +3,17 @@ using EdiFabric.Core.Model.Edi.X12;
 using EdiIngestConsole;
 using Moq;
 
-
 namespace EdiIngest.Tests;
 
 [TestFixture]
 public class DataServiceTests
 {
-    private Mock<EdiDbContext> _dbContext;
+    private Mock<EdiDbContext> _dbContextMock;
 
     [SetUp]
     public void Setup()
     {
-        this._dbContext = new Mock<EdiDbContext>();
+        this._dbContextMock = new Mock<EdiDbContext>();
     }
 
 
@@ -23,6 +22,7 @@ public class DataServiceTests
     {
         // arrange
         List<IEdiItem> items = [];
+
         GS gs = new()
         {
             ReceiverIDCode_3 = "TEST",
@@ -34,14 +34,15 @@ public class DataServiceTests
 
         items.Add(gs);
 
-        DataService dataService = new(this._dbContext.Object);
+        DataService dataService = new(this._dbContextMock.Object);
 
         // act
         var result = await dataService.SaveItems(items);
 
         // assert
-        this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
+    
 
     [Test]
     public async Task SaveItems_With_Null_Input_Should_Not_Call_SaveChangesAsync()
@@ -49,13 +50,13 @@ public class DataServiceTests
         // arrange
         List<IEdiItem>? items = null;       
 
-        DataService dataService = new(this._dbContext.Object);
+        DataService dataService = new(this._dbContextMock.Object);
 
         // act
         var result = await dataService.SaveItems(items);
 
         // assert
-        this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
 
@@ -65,13 +66,12 @@ public class DataServiceTests
         // arrange
         List<IEdiItem> items = [];
 
-        DataService dataService = new(this._dbContext.Object);
+        DataService dataService = new(this._dbContextMock.Object);
 
         // act
         var result = await dataService.SaveItems(items);
 
         // assert
-        this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
-
