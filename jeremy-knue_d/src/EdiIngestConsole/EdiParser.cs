@@ -1,23 +1,22 @@
-﻿using System;
-using EdiFabric;
+﻿using EdiFabric;
 using EdiFabric.Core.Model.Edi;
-using EdiFabric.Core.Model.Edi.X12;
-using EdiFabric.Templates.Hipaa5010;
-using EdiFabric.Framework;
 using EdiFabric.Framework.Readers;
-using EdiFabric.Framework.Writers;
-using System.Text;
 
 namespace EdiIngestConsole;
 
+/// <summary>
+/// Parse 837 EDI file
+/// </summary>
+/// <remarks>
+/// License key for EdiFabric expected to exist in environment variable named "EDI_KEY"
+/// </remarks>
 public class EdiParser : IEdiParser
 {
 	protected string? licenseKey;
 
 	public EdiParser()
 	{
-		this.licenseKey = Environment.GetEnvironmentVariable("EDI_KEY");
-				
+		this.licenseKey = Environment.GetEnvironmentVariable("EDI_KEY");				
 	}
 
     public List<IEdiItem> ParseFile(string filename)

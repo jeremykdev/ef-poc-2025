@@ -2,7 +2,11 @@
 using EdiIngestConsole;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace EdiIngestConsole;
 
+/// <summary>
+/// Main worker program.
+/// </summary>
 internal class Program
 {
     static async Task Main(string[] args)

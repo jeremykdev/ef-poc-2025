@@ -5,7 +5,9 @@ using EdiFabric.Core.Model.Edi.X12;
 
 namespace EdiIngestConsole;
 
-
+/// <summary>
+/// EF database context
+/// </summary>
 public class EdiDbContext : DbContext 
 {
     public EdiDbContext(DbContextOptions<EdiDbContext> options) : base(options)
@@ -30,6 +32,8 @@ public class EdiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // add auto increment ids for entities' tables
+
         modelBuilder.Entity<GE>().Property<int>("GE_Id").UseIdentityColumn();
         modelBuilder.Entity<GE>().HasKey("GE_Id");
         
@@ -48,9 +52,10 @@ public class EdiDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // default to using database connection string from enviroment vars
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONN"), sqlOpts => sqlOpts.CommandTimeout(120));   
+            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONN"));   
         }
     }
 

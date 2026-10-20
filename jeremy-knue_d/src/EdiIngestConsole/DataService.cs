@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EdiIngestConsole;
 
+/// <summary>
+/// Data service wraps EF db context with logic to handle IEdiItems
+/// Also handles migrations
+/// </summary>
 public class DataService(EdiDbContext dbContext) : IDataService
 {
     public async Task<int> SaveItems(IEnumerable<IEdiItem> ediItems)
