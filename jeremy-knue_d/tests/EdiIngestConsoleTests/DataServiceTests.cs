@@ -41,7 +41,37 @@ public class DataServiceTests
 
         // assert
         this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }
 
+    [Test]
+    public async Task SaveItems_With_Null_Input_Should_Not_Call_SaveChangesAsync()
+    {
+        // arrange
+        List<IEdiItem>? items = null;       
+
+        DataService dataService = new(this._dbContext.Object);
+
+        // act
+        var result = await dataService.SaveItems(items);
+
+        // assert
+        this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+
+    [Test]
+    public async Task SaveItems_With_Empy_Input_Should_Not_Call_SaveChangesAsync()
+    {
+        // arrange
+        List<IEdiItem> items = [];
+
+        DataService dataService = new(this._dbContext.Object);
+
+        // act
+        var result = await dataService.SaveItems(items);
+
+        // assert
+        this._dbContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
 
