@@ -70,7 +70,7 @@ REF*2U*W1014~
 // maps to: CLM_ClaimInformation_3
 CLM*1000A*140***19:B:1*Y*A*Y*Y~
 
-// maps to: ?
+// maps to: ? may be HI_DependentHealthCareDiagnosisCode_2
 HI*ABK:I10~
 
 // maps to: LX_HeaderNumber
@@ -115,7 +115,7 @@ REF*2U*W1014~
 // maps to: CLM_ClaimInformation_3 
 CLM*1001A*140***19:B:1*Y*A*Y*Y~
 
-// maps to: 
+// maps to: ? may be HI_DependentHealthCareDiagnosisCode_2
 HI*ABK:I10~
 
 // maps to: LX_HeaderNumber
