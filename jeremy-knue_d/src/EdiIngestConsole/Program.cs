@@ -30,20 +30,25 @@ internal class Program
 
         if (result is null)
             Console.WriteLine("Parse result is null");
+        else if (!result.Success)
+            Console.WriteLine($"Parse failed {result.Message}");
         else
         {
-            Console.WriteLine($"{result.Count} items parsed.");
-            foreach (var item in result)
+            Console.WriteLine($"{result.EdiItems.Count} items parsed.");
+            Console.WriteLine($"Hash: {result.SourceHash}");
+            foreach (var item in result.EdiItems)
                 Console.WriteLine(item);
 
             Console.WriteLine("");
             Console.WriteLine("");
             
+            // TODO: add duplicate detection to SaveItems
+            /*
             Console.WriteLine("Preparing to save data");
             int count = await dataService!.SaveItems(result);
 
             Console.WriteLine($"Number of items saved: {count}");
-         
+            */
         }
 
         Console.WriteLine("Press any key to exit.");

@@ -1,6 +1,8 @@
 ﻿using EdiFabric;
 using EdiFabric.Core.Model.Edi;
 using EdiFabric.Framework.Readers;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace EdiIngestConsole;
 
@@ -19,18 +21,20 @@ public class EdiParser : IEdiParser
 		this.licenseKey = Environment.GetEnvironmentVariable("EDI_KEY");				
 	}
 
-    public List<IEdiItem> ParseFile(string filename)
+    public ParseResult ParseFile(string filename)
     {
 		if (filename == null)
 		{
-			Console.WriteLine("File name missing");
-			return [];
+            string err = "Filename missing";
+            Console.WriteLine(err);
+			return new ParseResult { Success = false, Message = err};
 		}
 
 		if (!System.IO.File.Exists(filename))
         {
-            Console.WriteLine($"File not found: {filename}");
-            return [];
+            string err = $"File not found: {filename}";
+            Console.WriteLine();
+            return new ParseResult { Success = false, Message = err };
         }
 
         License.SetSerial(this.licenseKey);
@@ -39,14 +43,32 @@ public class EdiParser : IEdiParser
 
         List<IEdiItem> ediItems;
         using (var ediReader = new X12Reader(ediStream, "EdiFabric.Templates.Hipaa"))
-            ediItems = ediReader.ReadToEnd().ToList();
+            ediItems = ediReader.ReadToEnd().ToList();        
 
-        return ediItems;
+       
+        string hash = CreateHash(filename);
+
+        return new ParseResult
+        {
+            Success = true,
+            Message = "File parsed",
+            EdiItems = ediItems,
+            SourceFileName = filename,
+            SourceHash = hash
+        };
     }
+
+    private static string CreateHash(string filename)
+    {
+        using Stream stream = File.OpenRead(filename);
+        byte[] hash = SHA256.HashData(stream);
+        return Convert.ToHexString(hash);
+    }
+
 }
 
 
 public interface IEdiParser
 {
-    List<IEdiItem> ParseFile(string filename);
+    ParseResult ParseFile(string filename);
 }

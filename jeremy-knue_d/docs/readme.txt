@@ -2,7 +2,7 @@ To run the console application using Visual Studio
 
 1) Create a file named ".env" to the console project.   
 On the file's Properties set Copy to Output Directory to always.
-It should be a text file containing enviromental variables.
+It should be a text file containing environmental variables.
 Replace the {Placeholders} with actual values to use at runtime.  
 
 GREET contains the message displayed when the application starts up.
@@ -38,4 +38,28 @@ SQL_CONN=Server=.\SQLExpress;Integrated Security=True;Initial Catalog=EDI;TrustS
 This is currently done automatically by copying the file to the output directory in Visual Studio.
 
 
-Examples for both files above can be found in the samples directory.  Note that the .env file in samples has been named "sample.env.txt" to all the file to be inclduded in git commits.  Normally .env files are ignored by git.
+Examples for both files above can be found in the samples directory.  Note that the .env file in samples has been named "sample.env.txt" to all the file to be included in git commits.  Normally .env files are ignored by git.
+
+
+
+
+May wish to store hashes of file (string content)
+
+using System.Security.Cryptography;
+using System.Text;
+
+static string GetSha256(string input)
+{
+    byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+    return Convert.ToHexString(hash);
+}
+
+var seenHashes = new HashSet<string>();
+
+string value = GetValue();
+string hash = GetSha256(value);
+
+if (!seenHashes.Add(hash))
+{
+    Console.WriteLine("Possible duplicate found!");
+}
