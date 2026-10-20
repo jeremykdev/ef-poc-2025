@@ -1,0 +1,137 @@
+Below is based on an example 837 file. Comments have been added for the data mapping.  The comments and spacing make the file malformed.
+Useful only as a reference.
+
+// maps to: IsaEntities
+ISA*00*          *00*          *ZZ*1234567        *ZZ*11111          *170508*1141*^*00501*000000101*1*P*:~
+
+// maps to: GsEntities
+GS*HC*XXXXXXX*XXXXX*20170617*1741*101*X*005010X222A1~
+
+// maps to: ST
+ST*837*1239*005010X222A1~
+
+// maps to: BHT_BeginningOfHierarchicalTransaction_8
+BHT*0019*00*010*20170617*1741*CH~
+
+// maps to: NM1_InformationReceiverName_4
+NM1*41*2*SUBMITTER*****46*ABC123~
+
+// maps to: PER_BillingProviderContactInformation
+PER*IC*BOB SMITH*TE*4805551212~
+
+// maps to: NM1_ReceiverName
+NM1*40*2*RECEIVER*****46*44556~
+
+// maps to: HL_BillingProviderHierarchicalLevel
+HL*1**20*1~
+
+// maps to: NM1_BillingProviderName_2
+NM1*85*2*BILLING PROVIDER*****XX*1122334455~
+
+// maps to: N3_AdditionalPatientInformationContactAddress
+N3*1234 SOME ROAD~
+
+// maps to: N4_AdditionalPatientInformationContactCity
+N4*CHICAGO*IL*606739999~
+
+// maps to: REF_BillingProviderTaxIdentification
+REF*EI*999999999~
+
+// maps to: HL_SubscriberHierarchicalLevel
+HL*2*1*22*0~
+
+// maps to: SBR_SubscriberInformation
+SBR*P*18*******12~
+
+// maps to: NM1_SubscriberName_5
+NM1*IL*1*BLOGGS*JOE****MI*1234567890~
+
+// maps to: N3_AdditionalPatientInformationContactAddress
+N3*1 SOME BLVD~
+
+// maps to: N4_AdditionalPatientInformationContactCity
+N4*CHICAGO*IL*606129998~
+
+// maps to: DMG_PatientDemographicInformation
+DMG*D8*19570111*M~
+
+// maps: NM1_OtherPayerName 
+NM1*PR*2*PAYER*****PI*12345~
+
+// maps to: N3_AdditionalPatientInformationContactAddress
+N3*1 PAYER WAY~
+
+// maps to: N4_AdditionalPatientInformationContactCity
+N4*ST LOUIS*MO*212441850~
+
+// maps to: REF_OtherPayerSecondaryIdentifier
+REF*2U*W1014~
+
+// maps to: CLM_ClaimInformation_3
+CLM*1000A*140***19:B:1*Y*A*Y*Y~
+
+// maps to: ?
+HI*ABK:I10~
+
+// maps to: LX_HeaderNumber
+LX*1~
+
+// maps to: SV1_ProfessionalService
+SV1*HC:99213*140*UN*1***1~
+
+// maps to: DTP_ClaimLevelServiceDate
+DTP*472*D8*20151124~
+
+// maps to: HL_SubscriberHierarchicalLevel
+HL*3*1*22*0~
+
+// maps to: SBR_SubscriberInformation
+SBR*P*18*******12~
+
+// maps to: NM1_SubscriberName_5
+NM1*IL*1*BLOGGS*FRED****MI*9876543201~
+
+// maps to:  N3_AdditionalPatientInformationContactAddress
+N3*1 ANOTHER STR~
+
+// maps to: N4_AdditionalPatientInformationContactCity
+N4*CHICAGO*IL*606129998~
+
+// maps to: DMG_PatientDemographicInformation
+DMG*D8*19700601*M~
+
+// maps to: NM1_OtherPayerName 
+NM1*PR*2*PAYER*****PI*12345~
+
+// maps to: N3_AdditionalPatientInformationContactAddress
+N3*1 PAYER WAY~
+
+// maps to: N4_AdditionalPatientInformationContactCity
+N4*ST LOUIS*MO*212441850~
+
+// maps to:  REF_OtherPayerSecondaryIdentifier
+REF*2U*W1014~
+
+// maps to: CLM_ClaimInformation_3 
+CLM*1001A*140***19:B:1*Y*A*Y*Y~
+
+// maps to: 
+HI*ABK:I10~
+
+// maps to: LX_HeaderNumber
+LX*1~
+
+// maps to: SV1_ProfessionalService
+SV1*HC:99213*140*UN*1***1~
+
+// maps to: DTP_ClaimLevelServiceDate
+DTP*472*D8*20151124~
+
+// maps to: SE
+SE*41*1239~
+
+// maps to: GeEntities
+GE*1*101~
+
+// maps to: IeaEntities
+IEA*1*000000101~
