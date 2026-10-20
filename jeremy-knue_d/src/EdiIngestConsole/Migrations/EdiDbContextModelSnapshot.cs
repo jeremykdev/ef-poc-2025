@@ -8015,6 +8015,37 @@ namespace EdiIngestConsole.Migrations
                     b.ToTable("TS837PEntities");
                 });
 
+            modelBuilder.Entity("EdiIngestConsole.Models.History", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("DateProcessed")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceFilename")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("History");
+                });
+
             modelBuilder.Entity("EdiFabric.Templates.Hipaa5010.All_AMT_837P", b =>
                 {
                     b.HasOne("EdiFabric.Templates.Hipaa5010.AMT_PostageClaimedAmount", "AMT_PostageClaimedAmount")

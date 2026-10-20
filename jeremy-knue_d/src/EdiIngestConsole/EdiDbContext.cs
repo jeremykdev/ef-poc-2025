@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using EdiFabric.Templates.Hipaa5010;
 using EdiFabric.Core.Model.Edi.X12;
+using EdiIngestConsole.Models;
 
 namespace EdiIngestConsole;
 
@@ -19,6 +20,8 @@ public class EdiDbContext : DbContext
     {
         
     }
+
+    public DbSet<History> HistoryEntities { get; set; }
 
     public DbSet<ISA> IsaEntities { get; set; }
 
