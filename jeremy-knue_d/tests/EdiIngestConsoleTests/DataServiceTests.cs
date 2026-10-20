@@ -34,44 +34,22 @@ public class DataServiceTests
 
         items.Add(gs);
 
+        ParseResult parseResult = new()
+        {
+            Success = true,
+            Message = String.Empty,
+            EdiItems = items,
+            SourceFileName = "Test.txt",
+            SourceHash = String.Empty // empty hash bypasses duplicate check 
+        };
+
         DataService dataService = new(this._dbContextMock.Object);
 
         // act
-        var result = await dataService.SaveItems(items);
+        var result = await dataService.SaveItems(parseResult);
 
         // assert
         this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
-    
-
-    [Test]
-    public async Task SaveItems_With_Null_Input_Should_Not_Call_SaveChangesAsync()
-    {
-        // arrange
-        List<IEdiItem>? items = null;       
-
-        DataService dataService = new(this._dbContextMock.Object);
-
-        // act
-        var result = await dataService.SaveItems(items);
-
-        // assert
-        this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-
-    [Test]
-    public async Task SaveItems_With_Empy_Input_Should_Not_Call_SaveChangesAsync()
-    {
-        // arrange
-        List<IEdiItem> items = [];
-
-        DataService dataService = new(this._dbContextMock.Object);
-
-        // act
-        var result = await dataService.SaveItems(items);
-
-        // assert
-        this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-    }
+     
 }

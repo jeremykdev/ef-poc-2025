@@ -1,6 +1,7 @@
 ﻿using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.X12;
 using EdiFabric.Templates.Hipaa5010;
+using EdiIngestConsole.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EdiIngestConsole;
@@ -11,34 +12,55 @@ namespace EdiIngestConsole;
 /// </summary>
 public class DataService(EdiDbContext dbContext) : IDataService
 {
-    public async Task<int> SaveItems(IEnumerable<IEdiItem> ediItems)
+    public async Task<int> SaveItems(ParseResult parseResult)
     {
-        if (ediItems is null || !ediItems.Any())
-            return 0;
-      
+        ArgumentNullException.ThrowIfNull(parseResult);
+
         if (dbContext.Database is not null)
             await dbContext.Database.MigrateAsync();
 
-        foreach (var item in ediItems)
+        History history = new(parseResult);
+
+        // check for duplicates
+        bool duplcateFile = false;
+        if (!String.IsNullOrWhiteSpace(parseResult.SourceHash))
         {
-            if (item is null)
-                continue;           
+            duplcateFile = dbContext.HistoryEntities
+                                .Where(x => x.SourceHash.Equals(parseResult.SourceHash))
+                                .Any();
 
-            if (item is ISA)
-                dbContext.Add((item as ISA)!);            
-
-            if (item is GS)         
-                dbContext.Add((item as GS)!);            
-
-            if (item is TS837P)
-                dbContext.Add((item as TS837P)!);
-
-            if (item is GE)
-                dbContext.Add((item as GE)!);
-
-            if (item is IEA)
-                dbContext.Add((item as IEA)!);
+            if (duplcateFile)
+            {
+                Console.WriteLine("Duplicate detected. Records from file will not be saved");
+                history.Message = "Duplicate file detected";
+            }
         }
+
+        if (parseResult.EdiItems is not null && !duplcateFile)
+        {
+            foreach (var item in parseResult.EdiItems)
+            {
+                if (item is null)
+                    continue;
+
+                if (item is ISA)
+                    dbContext.Add((item as ISA)!);
+
+                if (item is GS)
+                    dbContext.Add((item as GS)!);
+
+                if (item is TS837P)
+                    dbContext.Add((item as TS837P)!);
+
+                if (item is GE)
+                    dbContext.Add((item as GE)!);
+
+                if (item is IEA)
+                    dbContext.Add((item as IEA)!);
+            }
+        }
+
+        dbContext.Add(history);
 
         int result = await dbContext.SaveChangesAsync();
         return result;
@@ -47,5 +69,5 @@ public class DataService(EdiDbContext dbContext) : IDataService
 
 public interface IDataService
 {
-    Task<int> SaveItems(IEnumerable<IEdiItem> ediItems);
+    Task<int> SaveItems(ParseResult parseResult);
 }

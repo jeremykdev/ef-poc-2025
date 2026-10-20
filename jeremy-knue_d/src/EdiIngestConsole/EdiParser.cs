@@ -51,7 +51,7 @@ public class EdiParser : IEdiParser
         return new ParseResult
         {
             Success = true,
-            Message = "File parsed",
+            Message = String.Empty, // no message needed on successfull parse
             EdiItems = ediItems,
             SourceFileName = filename,
             SourceHash = hash

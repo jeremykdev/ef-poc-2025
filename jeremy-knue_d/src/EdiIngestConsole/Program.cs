@@ -42,13 +42,11 @@ internal class Program
             Console.WriteLine("");
             Console.WriteLine("");
             
-            // TODO: add duplicate detection to SaveItems
-            /*
+           
             Console.WriteLine("Preparing to save data");
             int count = await dataService!.SaveItems(result);
 
-            Console.WriteLine($"Number of items saved: {count}");
-            */
+            Console.WriteLine($"Number of items saved: {count}");            
         }
 
         Console.WriteLine("Press any key to exit.");
