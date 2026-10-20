@@ -30,10 +30,20 @@ public class EdiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GE>().Property<int>("Id").UseIdentityColumn();
-        modelBuilder.Entity<IEA>().Property<int>("Id").UseIdentityColumn();
-        modelBuilder.Entity<GS>().Property<int>("Id").UseIdentityColumn();
-        modelBuilder.Entity<ISA>().Property<int>("Id").UseIdentityColumn();
+        modelBuilder.Entity<GE>().Property<int>("GE_Id").UseIdentityColumn();
+        modelBuilder.Entity<GE>().HasKey("GE_Id");
+        
+        modelBuilder.Entity<IEA>().Property<int>("IEA_Id").UseIdentityColumn();
+        modelBuilder.Entity<IEA>().HasKey("IEA_Id");
+
+        modelBuilder.Entity<GS>().Property<int>("GS_Id").UseIdentityColumn();
+        modelBuilder.Entity<GS>().HasKey("GS_Id");
+
+        modelBuilder.Entity<ISA>().Property<int>("ISA_Id").UseIdentityColumn();
+        modelBuilder.Entity<ISA>().HasKey("ISA_Id");
+
+        modelBuilder.Entity<TS837P>().Property<int>("TS837P_Id").UseIdentityColumn();
+        modelBuilder.Entity<TS837P>().HasKey("TS837P_Id");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

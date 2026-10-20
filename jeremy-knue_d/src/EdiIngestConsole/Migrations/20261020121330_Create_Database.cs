@@ -5,7 +5,7 @@
 namespace EdiIngestConsole.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_TS837P : Migration
+    public partial class Create_Database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -1012,6 +1012,40 @@ namespace EdiIngestConsole.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GeEntities",
+                columns: table => new
+                {
+                    GE_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumberOfIncludedSets_1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupControlNumber_2 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeEntities", x => x.GE_Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GsEntities",
+                columns: table => new
+                {
+                    GS_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodeIdentifyingInformationType_1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SenderIDCode_2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceiverIDCode_3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date_4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Time_5 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupControlNumber_6 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionTypeCode_7 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VersionAndRelease_8 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GsEntities", x => x.GS_Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HCP_ClaimPricing",
                 columns: table => new
                 {
@@ -1111,6 +1145,48 @@ namespace EdiIngestConsole.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HL_SubscriberHierarchicalLevel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IeaEntities",
+                columns: table => new
+                {
+                    IEA_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumberOfIncludedGroups_1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeControlNumber_2 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IeaEntities", x => x.IEA_Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IsaEntities",
+                columns: table => new
+                {
+                    ISA_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuthorizationInformationQualifier_1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AuthorizationInformation_2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityInformationQualifier_3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityInformation_4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SenderIDQualifier_5 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeSenderID_6 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceiverIDQualifier_7 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeReceiverID_8 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeDate_9 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeTime_10 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeControlStandardsIdentifier_11 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeControlVersionNumber_12 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterchangeControlNumber_13 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AcknowledgementRequested_14 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsageIndicator_15 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ComponentElementSeparator_16 = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IsaEntities", x => x.ISA_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -4953,8 +5029,9 @@ namespace EdiIngestConsole.Migrations
                 name: "TS837PEntities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    TS837P_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     STId = table.Column<int>(type: "int", nullable: true),
                     BHT_BeginningOfHierarchicalTransactionId = table.Column<int>(type: "int", nullable: true),
                     AllNM1Id = table.Column<int>(type: "int", nullable: true),
@@ -4962,7 +5039,7 @@ namespace EdiIngestConsole.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TS837PEntities", x => x.Id);
+                    table.PrimaryKey("PK_TS837PEntities", x => x.TS837P_Id);
                     table.ForeignKey(
                         name: "FK_TS837PEntities_All_NM1_837P_6_AllNM1Id",
                         column: x => x.AllNM1Id,
@@ -5214,7 +5291,7 @@ namespace EdiIngestConsole.Migrations
                     PRV_BillingProviderSpecialtyInformationId = table.Column<int>(type: "int", nullable: true),
                     CUR_ForeignCurrencyInformationId = table.Column<int>(type: "int", nullable: true),
                     AllNM1Id = table.Column<int>(type: "int", nullable: true),
-                    TS837PId = table.Column<int>(type: "int", nullable: true)
+                    TS837P_Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -5240,10 +5317,10 @@ namespace EdiIngestConsole.Migrations
                         principalTable: "PRV_BillingProviderSpecialtyInformation",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Loop_2000A_837P_TS837PEntities_TS837PId",
-                        column: x => x.TS837PId,
+                        name: "FK_Loop_2000A_837P_TS837PEntities_TS837P_Id",
+                        column: x => x.TS837P_Id,
                         principalTable: "TS837PEntities",
-                        principalColumn: "Id");
+                        principalColumn: "TS837P_Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -6739,9 +6816,9 @@ namespace EdiIngestConsole.Migrations
                 column: "PRV_BillingProviderSpecialtyInformationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Loop_2000A_837P_TS837PId",
+                name: "IX_Loop_2000A_837P_TS837P_Id",
                 table: "Loop_2000A_837P",
-                column: "TS837PId");
+                column: "TS837P_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loop_2000B_837P_AllNM1Id",
@@ -7829,7 +7906,19 @@ namespace EdiIngestConsole.Migrations
                 name: "FRM_SupportingDocumentation");
 
             migrationBuilder.DropTable(
+                name: "GeEntities");
+
+            migrationBuilder.DropTable(
+                name: "GsEntities");
+
+            migrationBuilder.DropTable(
                 name: "HI_ConditionInformation");
+
+            migrationBuilder.DropTable(
+                name: "IeaEntities");
+
+            migrationBuilder.DropTable(
+                name: "IsaEntities");
 
             migrationBuilder.DropTable(
                 name: "K3_FileInformation");

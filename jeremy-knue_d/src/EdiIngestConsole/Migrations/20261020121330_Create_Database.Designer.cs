@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdiIngestConsole.Migrations
 {
     [DbContext(typeof(EdiDbContext))]
-    [Migration("20261019193214_Add_TS837P")]
-    partial class Add_TS837P
+    [Migration("20261020121330_Create_Database")]
+    partial class Create_Database
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,142 @@ namespace EdiIngestConsole.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EdiFabric.Core.Model.Edi.X12.GE", b =>
+                {
+                    b.Property<int>("GE_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GE_Id"));
+
+                    b.Property<string>("GroupControlNumber_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumberOfIncludedSets_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GE_Id");
+
+                    b.ToTable("GeEntities");
+                });
+
+            modelBuilder.Entity("EdiFabric.Core.Model.Edi.X12.GS", b =>
+                {
+                    b.Property<int>("GS_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GS_Id"));
+
+                    b.Property<string>("CodeIdentifyingInformationType_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Date_4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GroupControlNumber_6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverIDCode_3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderIDCode_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Time_5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionTypeCode_7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VersionAndRelease_8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GS_Id");
+
+                    b.ToTable("GsEntities");
+                });
+
+            modelBuilder.Entity("EdiFabric.Core.Model.Edi.X12.IEA", b =>
+                {
+                    b.Property<int>("IEA_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IEA_Id"));
+
+                    b.Property<string>("InterchangeControlNumber_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumberOfIncludedGroups_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IEA_Id");
+
+                    b.ToTable("IeaEntities");
+                });
+
+            modelBuilder.Entity("EdiFabric.Core.Model.Edi.X12.ISA", b =>
+                {
+                    b.Property<int>("ISA_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ISA_Id"));
+
+                    b.Property<string>("AcknowledgementRequested_14")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorizationInformationQualifier_1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorizationInformation_2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ComponentElementSeparator_16")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeControlNumber_13")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeControlStandardsIdentifier_11")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeControlVersionNumber_12")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeDate_9")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeReceiverID_8")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeSenderID_6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InterchangeTime_10")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverIDQualifier_7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityInformationQualifier_3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityInformation_4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderIDQualifier_5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsageIndicator_15")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ISA_Id");
+
+                    b.ToTable("IsaEntities");
+                });
 
             modelBuilder.Entity("EdiFabric.Core.Model.Edi.X12.SE", b =>
                 {
@@ -3590,7 +3726,7 @@ namespace EdiIngestConsole.Migrations
                     b.Property<int?>("PRV_BillingProviderSpecialtyInformationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TS837PId")
+                    b.Property<int?>("TS837P_Id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -3603,7 +3739,7 @@ namespace EdiIngestConsole.Migrations
 
                     b.HasIndex("PRV_BillingProviderSpecialtyInformationId");
 
-                    b.HasIndex("TS837PId");
+                    b.HasIndex("TS837P_Id");
 
                     b.ToTable("Loop_2000A_837P");
                 });
@@ -7848,16 +7984,19 @@ namespace EdiIngestConsole.Migrations
 
             modelBuilder.Entity("EdiFabric.Templates.Hipaa5010.TS837P", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TS837P_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TS837P_Id"));
 
                     b.Property<int?>("AllNM1Id")
                         .HasColumnType("int");
 
                     b.Property<int?>("BHT_BeginningOfHierarchicalTransactionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<int?>("SEId")
@@ -7866,7 +8005,7 @@ namespace EdiIngestConsole.Migrations
                     b.Property<int?>("STId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("TS837P_Id");
 
                     b.HasIndex("AllNM1Id");
 
@@ -7877,104 +8016,6 @@ namespace EdiIngestConsole.Migrations
                     b.HasIndex("STId");
 
                     b.ToTable("TS837PEntities");
-                });
-
-            modelBuilder.Entity("EdiIngestConsole.Models.GsEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CodeIdentifyingInformationType_1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Date_4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GroupControlNumber_6")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceiverIDCode_3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderIDCode_2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Time_5")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionTypeCode_7")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VersionAndRelease_8")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Gs");
-                });
-
-            modelBuilder.Entity("EdiIngestConsole.Models.IsaEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AcknowledgementRequested_14")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AuthorizationInformationQualifier_1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AuthorizationInformation_2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ComponentElementSeparator_16")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeControlNumber_13")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeControlStandardsIdentifier_11")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeControlVersionNumber_12")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeDate_9")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeReceiverID_8")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeSenderID_6")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InterchangeTime_10")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceiverIDQualifier_7")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityInformationQualifier_3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityInformation_4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderIDQualifier_5")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsageIndicator_15")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Isa");
                 });
 
             modelBuilder.Entity("EdiFabric.Templates.Hipaa5010.All_AMT_837P", b =>
@@ -8993,7 +9034,7 @@ namespace EdiIngestConsole.Migrations
 
                     b.HasOne("EdiFabric.Templates.Hipaa5010.TS837P", null)
                         .WithMany("Loop2000A")
-                        .HasForeignKey("TS837PId");
+                        .HasForeignKey("TS837P_Id");
 
                     b.Navigation("AllNM1");
 
