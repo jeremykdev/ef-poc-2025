@@ -50,7 +50,7 @@ public class EdiDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONN"));
+            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONN"), sqlOpts => sqlOpts.CommandTimeout(120));   
         }
     }
 

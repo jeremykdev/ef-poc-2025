@@ -18,17 +18,13 @@ public class DataService(EdiDbContext dbContext) : IDataService
         foreach (var item in ediItems)
         {
             if (item is null)
-                continue;
-
-           
+                continue;           
 
             if (item is ISA)
-                dbContext.Add((item as ISA)!);
-            
+                dbContext.Add((item as ISA)!);            
 
             if (item is GS)         
-                dbContext.Add((item as GS)!);
-            
+                dbContext.Add((item as GS)!);            
 
             if (item is TS837P)
                 dbContext.Add((item as TS837P)!);
