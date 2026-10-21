@@ -29,7 +29,9 @@ internal class Program
         IFileMover fileMover = provider.GetService<IFileMover>()!;
 
         // provide file name to be processed        
-        string filename = "837-malformed.txt"; // "Empty.txt"; // "837.txt";
+        string filename = "837.txt"; // "837-malformed.txt"; // "Empty.txt"; // "837.txt";
+
+        Console.WriteLine($"Start processing file: {filename}");
 
         try
         {
