@@ -72,3 +72,4 @@ Desktop.ini
 appsettings.*
 !appsettings.*.example.*
 /jeremy-knue_d/src/EdiIngestConsole/,env
+/jeremy-knue_d/tests/EdiIngestConsoleTests/.env
