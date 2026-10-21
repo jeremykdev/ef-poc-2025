@@ -16,7 +16,7 @@ public class EdiParserTests
     }
 
     [Test]
-    public void Parse_Valid_Stream_Should_Return_Success_Is_True_With_EditItems()
+    public void Parse_Valid_Stream_Should_Return_Success_Is_True_With_EdiItems()
     {
         // arrange
         EdiParser parser = new();
