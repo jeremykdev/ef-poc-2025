@@ -7,19 +7,47 @@ ISA*00*          *00*          *ZZ*1234567        *ZZ*11111          *170508*114
 // maps to: GsEntities
 GS*HC*XXXXXXX*XXXXX*20170617*1741*101*X*005010X222A1~
 
+// transaction set header
+// 837 = transaction set identifer code, 837 indicates a health care claim
+// 1239 = transaction set control number, a tracking number - to be valid that value must also be matched in SE (transaction trailer record)
+// 005010X222A1 = implementation convention reference, identifies the standard used for the file.  In this case a version of the 5010 standard.
 // maps to: ST
 ST*837*1239*005010X222A1~
 
+// beginning of hierarchical transaction
+// BHT = identifies this segment as BHT (beginning of hierarchical transaction) type
+// 0019 = hierarchical structure code, in this case document relates to claim data, mandates order of children
+// 00 = transaction set purpose code, in this case 00 means an original (claim) transaction 
+// 010 = originator application transaction id, assigned by sending system to track a batch of data
+// 20170617 = transaction set creation date in format yyyyMMdd
+// 1741 = transaction set creation time in format HHmm
+// CH = transaction type code, in this case Chargable 
 // maps to: BHT_BeginningOfHierarchicalTransaction_8
 BHT*0019*00*010*20170617*1741*CH~
 
 // maps to: NM1_InformationReceiverName_4
+// NM1 = identifies this segment as a Name segment
+// 41 = entity identifier code, in this case submitter
+// SUBMITTER = submitter last or organization name
+// 46 = identification code qualifier, in this case 46 is electronic transmitter identification number (ETIN)
+// ABC123 = submitter identifier
 NM1*41*2*SUBMITTER*****46*ABC123~
 
 // maps to: PER_BillingProviderContactInformation
+// PER = identifies segment as contact information
+// IC = contact function code, in this case IC is information contact, point of contact general inquiries
+// BOB SMITH = submitter contact name
+// TE = communication number qualifier, in this case TE is telephone number
+// 4805551212 = communication number, in this case the telephone number for Bob Smith
 PER*IC*BOB SMITH*TE*4805551212~
 
 // maps to: NM1_ReceiverName
+// NM1 = identifies this segment as a Name segment
+// 40 = entity identifier code, in this case receiver
+// 2 = entity type qualifier, in this case 2 is business
+// RECEIVER = receiver name
+// 46 = identification code qualifier, in this case 46 is electronic transmitter identification number (ETIN)
+// 44556 = primary receiver identifer
 NM1*40*2*RECEIVER*****46*44556~
 
 // maps to: HL_BillingProviderHierarchicalLevel
