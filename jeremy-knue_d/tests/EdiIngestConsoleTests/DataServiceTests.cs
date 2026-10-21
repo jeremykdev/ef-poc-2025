@@ -3,14 +3,14 @@ using EdiFabric.Core.Model.Edi.X12;
 using EdiIngestConsole;
 using Moq;
 
-namespace EdiIngest.Tests;
+namespace EdiIngestConsoleTests;
 
 [TestFixture]
 public class DataServiceTests
 {
     private Mock<EdiDbContext> _dbContextMock;
 
-    [SetUp]
+    [OneTimeSetUp]
     public void Setup()
     {
         this._dbContextMock = new Mock<EdiDbContext>();

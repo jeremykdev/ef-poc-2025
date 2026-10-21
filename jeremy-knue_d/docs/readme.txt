@@ -48,3 +48,11 @@ Empty.txt - a blank text file
 837-malformed.txt - a malformed EDI file
 
 To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name.
+
+
+==========================================
+
+Unit tests 
+
+1) The EdiParser class depends on a valid license key for EdiFabric existing in the enviroment variable. EDI_KEY
+When testing open the class EdiParserTests and ensure that the Setup method has the path to an .env file containing the key.
