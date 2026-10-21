@@ -1,5 +1,6 @@
 ﻿using EdiFabric;
 using EdiFabric.Core.Model.Edi;
+using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Framework.Readers;
 using System.Security.Cryptography;
 using System.Text;
@@ -37,18 +38,68 @@ public class EdiParser : IEdiParser
             return new ParseResult { Success = false, Message = err };
         }
 
-        License.SetSerial(this.licenseKey);
-
-        using Stream ediStream = File.OpenRead(filename);
-
-        List<IEdiItem> ediItems;
-        using (var ediReader = new X12Reader(ediStream, "EdiFabric.Templates.Hipaa"))
-            ediItems = ediReader.ReadToEnd().ToList();        
-
-       
         string hash = CreateHash(filename);
 
-        return new ParseResult
+        License.SetSerial(this.licenseKey);
+
+        List<IEdiItem> ediItems;
+
+        X12ReaderSettings x12ReaderSettings = new()
+        {
+            ContinueOnError = true,
+        };
+
+        using (Stream ediStream = File.OpenRead(filename))
+        {
+            using (var ediReader = new X12Reader(ediStream, "EdiFabric.Templates.Hipaa", x12ReaderSettings))
+                ediItems = ediReader.ReadToEnd().Where(x => x is not null).ToList();
+        }
+
+        if(ediItems is null)
+        {
+            return new()
+            {
+                Success = false,
+                Message = "Parse returned null EdiItems",
+                SourceFileName = filename,
+                SourceHash = hash
+            };
+        }
+
+
+              
+        var errors = ediItems.OfType<ReaderErrorContext>();
+        if (errors.Any())
+        {
+            StringBuilder builder = new();
+            Console.WriteLine($"Errors detected while parsing file.  Count of errors: {errors.Count()}");
+            foreach(var err in errors.Where(x => x is not null))
+            {
+                if(builder.Length > 0)
+                    builder.Append('\n');
+
+                builder.Append(err.Message);
+                
+            }
+
+            builder.Insert(0, "Parse errors detected: ");
+
+            string errorSummary = builder.ToString();
+
+            return new()
+            {
+                Success = false,
+                Message = errorSummary,
+                SourceFileName = filename,
+                SourceHash = hash,
+                EdiItems = ediItems
+            };
+        }
+       
+       
+        
+
+        return new()
         {
             Success = true,
             Message = String.Empty, // no message needed on successfull parse

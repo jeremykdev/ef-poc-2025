@@ -41,25 +41,11 @@ This is currently done automatically by copying the file to the output directory
 Examples for both files above can be found in the samples directory.  Note that the .env file in samples has been named "sample.env.txt" to all the file to be included in git commits.  Normally .env files are ignored by git.
 
 
+3) In program.cs set the filename to process.  This is the filename variable.  
+The project currently writes the following to the output directory.  
+837.txt - a valid 837 file
+Empty.txt - a blank text file
+837-malformed.txt - a malformed EDI file
 
+To process another file ensure that a copy is written to the output directory and set the filename variable.
 
-May wish to store hashes of file (string content)
-
-using System.Security.Cryptography;
-using System.Text;
-
-static string GetSha256(string input)
-{
-    byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(input));
-    return Convert.ToHexString(hash);
-}
-
-var seenHashes = new HashSet<string>();
-
-string value = GetValue();
-string hash = GetSha256(value);
-
-if (!seenHashes.Add(hash))
-{
-    Console.WriteLine("Possible duplicate found!");
-}

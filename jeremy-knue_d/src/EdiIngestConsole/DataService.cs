@@ -36,7 +36,8 @@ public class DataService(EdiDbContext dbContext) : IDataService
             }
         }
 
-        if (parseResult.EdiItems is not null && !duplcateFile)
+        // only save items from a valid parse, avoid partial processing of malformed file
+        if (parseResult.Success && parseResult.EdiItems is not null && !duplcateFile)
         {
             foreach (var item in parseResult.EdiItems)
             {
