@@ -28,13 +28,11 @@ internal class Program
         IDataService dataService = provider.GetService<IDataService>()!;
         IFileMover fileMover = provider.GetService<IFileMover>()!;
 
-        // provide file name to be processed
-        
+        // provide file name to be processed        
         string filename = "837-malformed.txt"; // "Empty.txt"; // "837.txt";
 
         try
         {
-
             var result = parser.ParseFile(filename);
 
             if (result is null)
@@ -58,7 +56,6 @@ internal class Program
                 string moved = fileMover.MoveCompletedFile(filename);
                 Console.WriteLine($"File moved to {moved}");
             }
-
         }
         catch (Exception ex)
         {

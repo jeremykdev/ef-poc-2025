@@ -9,7 +9,7 @@ GREET contains the message displayed when the application starts up.
 
 EDI_KEY contains the EdiFabric license key
 
-SQL_CONN contain the connection string for the SQL Server database.
+SQL_CONN contains the connection string for the SQL Server database.
 
 Example connection string containing the name of the database to use or create.  In this case "EDI".
 .\SQLExpress;Integrated Security=True;Initial Catalog=EDI;TrustServerCertificate=True;
@@ -42,10 +42,9 @@ Examples for both files above can be found in the samples directory.  Note that 
 
 
 3) In program.cs set the filename to process.  This is the filename variable.  
-The project currently writes the following to the output directory.  
+The project currently writes the following files to the output directory.  
 837.txt - a valid 837 file
 Empty.txt - a blank text file
 837-malformed.txt - a malformed EDI file
 
-To process another file ensure that a copy is written to the output directory and set the filename variable.
-
+To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name.
