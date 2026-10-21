@@ -19,14 +19,18 @@ internal class Program
         ServiceCollection services = new();
         services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
         services.AddTransient<IEdiParser, EdiParser>();
-        services.AddTransient<IDataService, DataService>();         
+        services.AddTransient<IDataService, DataService>();
+        services.AddTransient<IFileMover, FileMover>();
 
         var provider = services.BuildServiceProvider();
 
         IEdiParser parser = provider.GetService<IEdiParser>()!;
         IDataService dataService = provider.GetService<IDataService>()!;
+        IFileMover fileMover = provider.GetService<IFileMover>()!;
 
-        var result = parser.ParseFile("837.txt");
+        string filename = "837.txt";
+
+        var result = parser.ParseFile(filename);
 
         if (result is null)
             Console.WriteLine("Parse result is null");
@@ -46,9 +50,11 @@ internal class Program
             Console.WriteLine("Preparing to save data");
             int count = await dataService!.SaveItems(result);
 
-            Console.WriteLine($"Number of items saved: {count}");     
-            
-            // TODO: move file, consider refactor of dataservice to return result that indicates success 
+            Console.WriteLine($"Number of items saved: {count}");
+
+            Console.WriteLine("Moving file");
+            string moved = fileMover.MoveCompletedFile(filename);
+            Console.WriteLine($"File moved to {moved}");
         }
 
         Console.WriteLine("Press any key to exit.");

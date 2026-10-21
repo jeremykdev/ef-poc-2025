@@ -6,24 +6,36 @@ public class FileMover : IFileMover
 {
     private const string _completed = "completed";
 
-    public static void MoveCompletedFile(string filename)
+    public string MoveCompletedFile(string filename)
     {
         ArgumentNullException.ThrowIfNullOrEmpty(filename);
 
-        if (!Directory.Exists(_completed))
-            Directory.CreateDirectory(_completed);
+        DateTime utcNow = DateTime.UtcNow;
 
-        string extension = Path.GetExtension(filename);
-        string baseFilenameNoExt = Path.GetFileNameWithoutExtension(filename);
-        string randomFileNamePart = Path.GetRandomFileName().Replace(".", String.Empty);
+        string destinationDirectory = Path.Combine(_completed, utcNow.ToString("yyyy-MM-dd"));
 
-        string newFilename = String.Concat(baseFilenameNoExt, '-', DateTime.UtcNow.ToString("yyyyMMdd-HHmmss.fffffff"), '-', randomFileNamePart, extension);
-        string newFilenameWithPath = Path.Combine(_completed, newFilename);
+        if (!Directory.Exists(destinationDirectory))
+            Directory.CreateDirectory(destinationDirectory);
 
-        File.Move(filename, newFilenameWithPath);
+        string destinationFilename = Path.GetFileName(filename);
+        string destinationFilenameWithPath = Path.Combine(destinationDirectory, destinationFilename);
+
+        // when file with same name already exists in destination create a new filename
+        if (File.Exists(destinationFilenameWithPath))
+        {
+            string extension = Path.GetExtension(filename);
+            string baseFilenameNoExt = Path.GetFileNameWithoutExtension(filename);
+            string randomFileNamePart = Path.GetRandomFileName().Replace(".", String.Empty);
+            string newFilename = String.Concat(baseFilenameNoExt, '-', utcNow.ToString("yyyyMMdd-HHmmss.fffffff"), '-', randomFileNamePart, extension);
+            
+            destinationFilenameWithPath = Path.Combine(destinationDirectory, newFilename);
+        }
+
+        File.Move(filename, destinationFilenameWithPath);
+        return destinationFilenameWithPath;
     }
 }
 public interface IFileMover
 {
-    static abstract void MoveCompletedFile(string filename);
+    string MoveCompletedFile(string filename);
 }
