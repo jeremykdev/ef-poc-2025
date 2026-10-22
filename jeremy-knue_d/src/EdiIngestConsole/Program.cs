@@ -21,12 +21,19 @@ internal class Program
         services.AddTransient<IEdiParser, EdiParser>();
         services.AddTransient<IDataService, DataService>();
         services.AddTransient<IFileMover, FileMover>();
+        services.AddTransient<IFileDownloader, AwsFileDownloader>();
 
         var provider = services.BuildServiceProvider();
 
         IEdiParser parser = provider.GetService<IEdiParser>()!;
         IDataService dataService = provider.GetService<IDataService>()!;
         IFileMover fileMover = provider.GetService<IFileMover>()!;
+        IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
+
+
+        // TODO: uncomment below and refactor
+        /*
+
 
         // provide file name to be processed        
         string filename = "837.txt"; // "837-malformed.txt"; // "Empty.txt"; // "837.txt";
@@ -64,7 +71,12 @@ internal class Program
             Console.WriteLine($"Error: {ex.Message}");
         }
 
+
+        */
+
         Console.WriteLine("Press any key to exit.");
+
+
 
         Console.ReadKey();
     }
