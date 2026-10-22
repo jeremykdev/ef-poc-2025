@@ -1,3 +1,5 @@
+PHASE 1
+
 To run the console application using Visual Studio
 
 1) Create a file named ".env" to the console project.   
@@ -56,3 +58,43 @@ Unit tests
 
 1) The EdiParser class depends on a valid license key for EdiFabric existing in the enviroment variable. EDI_KEY
 When testing open the class EdiParserTests and ensure that the Setup method has the path to an .env file containing the key.
+
+
+PHASE 2 
+
+Setup moto.py
+1) Install Python (download at https://www.python.org/ ).  Ensure that python's bin and Scripts directories are added to PATH.
+Examples (text in curly braces are placeholders):
+C:\Users\{UserName}\AppData\Local\Python\bin
+C:\Users\{UserName}\AppData\Local\Python\pythoncore-{version}\Scripts
+
+2) Install Visual Studio C++ version 14.  Required to run moto.
+Can use Visual Studio installer to add C++ support.
+
+3) install moto at command line:
+pip install "moto[s3,server]"
+
+4) Verify install by starting moto server at command line:
+moto_server
+
+5) install AWS CLI (needed to script aws s3 commands).
+
+To test the setup go to the Scripts directory in src\EdiIngestConsole and run the batch files in this order
+1) start-moto.bat
+This starts the moto server.  Leave this open until finished with testing.  It can be closed when you are finished with s3 tasks/testing.
+
+2) test-moto.bat
+This connects to the moto server and runs a few s3 tasks.  Observe the output.  At the end of execution there should be a file in the folder: samples\files\test\from-s3 
+
+Resources
+
+AWS command line reference for S3:
+https://docs.aws.amazon.com/cli/latest/reference/s3/
+
+Moto server:
+https://docs.getmoto.org/en/latest/docs/server_mode.html
+
+
+
+
+
