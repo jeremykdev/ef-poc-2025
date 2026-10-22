@@ -7,7 +7,11 @@ namespace EdiIngestConsole;
 /// Downloads files from AWS
 /// </summary>
 /// <remarks>
-/// Depends on environment variables: "S3_BUCKET_NAME",  "S3_SERVICE_URL"
+/// Depends on environment variables: 
+/// S3_BUCKET_NAME - specifies bucket name
+/// S3_SERVICE_URL - specifies URL to connect to 
+/// AWS_ACCESS_KEY_ID - aws credential
+/// AWS_SECRET_ACCESS_KEY - aws credential
 /// </remarks>
 public class AwsFileDownloader : IFileDownloader
 {
