@@ -30,49 +30,60 @@ internal class Program
         IFileMover fileMover = provider.GetService<IFileMover>()!;
         IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
 
+        // where we are putting files that we get from s3 
+        string targetDirectory = @".\from-s3";
 
-        // TODO: uncomment below and refactor
-        /*
+        await fileDownloader.DownloadFiles(targetDirectory);
+
+        var files = Directory.GetFiles(targetDirectory);
 
 
+        // obsolete in phase 2
         // provide file name to be processed        
-        string filename = "837.txt"; // "837-malformed.txt"; // "Empty.txt"; // "837.txt";
+        // string filename = "837.txt"; // "837-malformed.txt"; // "Empty.txt"; // "837.txt";
 
-        Console.WriteLine($"Start processing file: {filename}");
-
-        try
+        if (files is not null && files.Any())
         {
-            var result = parser.ParseFile(filename);
-
-            if (result is null)
-                Console.WriteLine("Parse result is null");
-            else
+            Console.WriteLine($"Found {files.Length} files to process");
+           
+            foreach (var filename in files)
             {
-                Console.WriteLine($"{result.EdiItems.Count} items parsed.");
-                Console.WriteLine($"Hash: {result.SourceHash}");
-                foreach (var item in result.EdiItems)
-                    Console.WriteLine(item);
 
-                Console.WriteLine("");
-                Console.WriteLine("");
+                Console.WriteLine($"Start processing file: {filename}");
 
-                Console.WriteLine("Preparing to save data");
-                int count = await dataService!.SaveItems(result);
+                try
+                {
+                    var result = parser.ParseFile(filename);
 
-                Console.WriteLine($"Number of items saved: {count}");
+                    if (result is null)
+                        Console.WriteLine("Parse result is null");
+                    else
+                    {
+                        Console.WriteLine($"{result.EdiItems.Count} items parsed.");
+                        Console.WriteLine($"Hash: {result.SourceHash}");
+                        foreach (var item in result.EdiItems)
+                            Console.WriteLine(item);
 
-                Console.WriteLine("Moving file");
-                string moved = fileMover.MoveCompletedFile(filename);
-                Console.WriteLine($"File moved to {moved}");
+                        Console.WriteLine("");
+                        Console.WriteLine("");
+
+                        Console.WriteLine("Preparing to save data");
+                        int count = await dataService!.SaveItems(result);
+
+                        Console.WriteLine($"Number of items saved: {count}");
+
+                        Console.WriteLine("Moving file");
+                        string moved = fileMover.MoveCompletedFile(filename);
+                        Console.WriteLine($"File moved to {moved}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-
-
-        */
 
         Console.WriteLine("Press any key to exit.");
 
