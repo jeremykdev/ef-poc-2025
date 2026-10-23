@@ -95,6 +95,16 @@ Moto server:
 https://docs.getmoto.org/en/latest/docs/server_mode.html
 
 
+How moto, AWS CLI, and the console app work together.
+In phase 2 moto.py is used to simulate an AWS S3 source for files.
+
+See the /Scripts directory for batch files that start moto and setup the s3 files.
+Paths in these files need to change if the directory structure changes
+Also ensure that the bucket name 'EdiDemo' is used and edit if the changes in the application.
+
+When the console application starts it will call the batch files to a) start the moto server and b) upload the edi files.
+Watch those windows and wait on continuing the console application until the server starts and files have been uploaded.
+
 
 
 
