@@ -1,6 +1,6 @@
 ﻿using DotNetEnv;
-using EdiIngestConsole;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 
 namespace EdiIngestConsole;
 
@@ -14,7 +14,8 @@ internal class Program
         Env.Load();
 
         Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
-
+        Console.ReadKey();
+        
         // setup dependency injection
         ServiceCollection services = new();
         services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
@@ -85,10 +86,32 @@ internal class Program
             }
         }
 
-        Console.WriteLine("Press any key to exit.");
+        Console.WriteLine("Press any key to continue.");
 
 
 
         Console.ReadKey();
     }
+
+    /*
+    private static void RunBatchFile(string filename)
+    {
+        if (String.IsNullOrWhiteSpace(filename)) 
+            return;
+
+        // TODO: troubleshoot this
+        if (!File.Exists(filename))
+            return;
+
+        ProcessStartInfo psi = new(filename)
+        {
+            CreateNoWindow = false,
+            UseShellExecute = false,
+            WindowStyle = ProcessWindowStyle.Normal,
+            WorkingDirectory = Path.GetDirectoryName(filename)
+        };
+
+        Process.Start(psi);
+    }
+    */
 }
