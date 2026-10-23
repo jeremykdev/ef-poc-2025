@@ -38,11 +38,6 @@ internal class Program
 
         var files = Directory.GetFiles(targetDirectory);
 
-
-        // obsolete in phase 2
-        // provide file name to be processed        
-        // string filename = "837.txt"; // "837-malformed.txt"; // "Empty.txt"; // "837.txt";
-
         if (files is not null && files.Any())
         {
             Console.WriteLine($"Found {files.Length} files to process");
@@ -54,7 +49,7 @@ internal class Program
 
                 try
                 {
-                    var result = parser.ParseFile(filename);
+                    var result = await parser.ParseFileAsync(filename);
 
                     if (result is null)
                         Console.WriteLine("Parse result is null");
@@ -87,9 +82,6 @@ internal class Program
         }
 
         Console.WriteLine("Press any key to continue.");
-
-
-
         Console.ReadKey();
     }
 

@@ -35,7 +35,7 @@ public class AwsFileDownloader : IFileDownloader
 
     private TransferUtility CreateTransferUtility()
     {
-        if (String.IsNullOrWhiteSpace(this._serviceUrl))
+        if (this._serviceUrl is null)
             throw new Exception("S3 Service URL not set");
 
         if (!ValidateIsUrl(this._serviceUrl))
@@ -73,39 +73,15 @@ public class AwsFileDownloader : IFileDownloader
             );
 
         Console.WriteLine($"Download response: {response.Result}");
-
-        /*
-        await transferUtility.DownloadDirectoryAsync(
-            bucketName: this._bucketName,
-            localDirectory: destinationDirectory
-
-            );
-
-        */
-
-        /*
-        AmazonS3Client s3Client = new();
-
-        GetObjectRequest req = new()
-        {
-            BucketName = this._bucketName,
-        };
-
-        */
-
-        // TOOD: finish
     }
 
 
-    private static bool ValidateIsUrl(string input)
+    private static bool ValidateIsUrl(string? input)
     {
-        if (String.IsNullOrWhiteSpace(input))
-            return false;
-
-        if (Uri.TryCreate(input, UriKind.Absolute, out var result))
+        if (Uri.TryCreate(input, UriKind.Absolute, out var url))
         {
-            if (result.Scheme == Uri.UriSchemeHttp ||
-                result.Scheme == Uri.UriSchemeHttps
+            if (url.Scheme == Uri.UriSchemeHttp ||
+                url.Scheme == Uri.UriSchemeHttps
                 )
                 return true;
         }
