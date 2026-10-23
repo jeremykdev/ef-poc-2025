@@ -15,8 +15,72 @@ public class EdiParserTests
         Env.Load(@"..\..\..\.env");
     }
 
+    #region test async methods
+
     [Test]
-    public void Parse_Valid_Stream_Should_Return_Success_Is_True_With_EdiItems()
+    public async Task ParseStreamAsync_Valid_Stream_Should_Return_Success_Is_True_With_EdiItems()
+    {
+        // arrange
+        EdiParser parser = new();
+        using var stream = this.GetValid837Stream();
+
+        // act
+        var result = await parser.ParseStreamAsync(stream);
+
+        // assert        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Success, Is.True);
+            Assert.That(result.EdiItems, Is.Not.Empty);
+        });
+    }
+
+
+    [Test]
+    public async Task ParseStreamAsync_Empty_Stream_Should_Return_Empty_EditItems()
+    {
+        // arrange
+        EdiParser parser = new();
+        using var stream = this.GetEmptyStream();
+
+        // act
+        var result = await parser.ParseStreamAsync(stream);
+
+        // assert        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.EdiItems, Is.Empty);
+        });
+    }
+
+    [Test]
+    public async Task ParseStreamAsync_Malformed_Stream_Should_Return_Success_Is_False_With_Message()
+    {
+        // arrange
+        EdiParser parser = new();
+        using var stream = this.GetMalformed837Stream();
+
+        // act
+        var result = await parser.ParseStreamAsync(stream);
+
+        // assert        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Success, Is.False);
+            Assert.That(result.Message, Is.Not.Empty);
+        });
+    }
+
+
+    #endregion
+
+    #region test non-async methods
+
+    [Test]
+    public void ParseStream_Valid_Stream_Should_Return_Success_Is_True_With_EdiItems()
     {
         // arrange
         EdiParser parser = new();
@@ -35,7 +99,7 @@ public class EdiParserTests
     }
 
     [Test]
-    public void Parse_Empty_Stream_Should_Return_Empty_EditItems()
+    public void ParseStream_Empty_Stream_Should_Return_Empty_EditItems()
     {
         // arrange
         EdiParser parser = new();
@@ -54,7 +118,7 @@ public class EdiParserTests
 
 
     [Test]
-    public void Parse_Malformed_Stream_Should_Return_Success_Is_False_With_Message()
+    public void ParseStream_Malformed_Stream_Should_Return_Success_Is_False_With_Message()
     {
         // arrange
         EdiParser parser = new();
@@ -72,6 +136,9 @@ public class EdiParserTests
         });
     }
 
+    #endregion
+
+    #region helper methods
 
     /// <summary>
     /// Get an empty stream
@@ -193,4 +260,5 @@ IEA*1*000000101~
         return new(bytes);
     }
 
+    #endregion
 }
