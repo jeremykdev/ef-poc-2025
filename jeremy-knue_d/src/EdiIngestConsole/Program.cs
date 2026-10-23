@@ -13,9 +13,11 @@ internal class Program
     {
         Env.Load();
 
+        using var serverProcess = RunServerStartupBatchFile();
+
         Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
         Console.ReadKey();
-        
+
         // setup dependency injection
         ServiceCollection services = new();
         services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
@@ -38,72 +40,86 @@ internal class Program
 
         var files = Directory.GetFiles(targetDirectory);
 
-        if (files is not null && files.Any())
+        if (files is null || !files.Any())
         {
-            Console.WriteLine($"Found {files.Length} files to process");
-           
-            foreach (var filename in files)
-            {
-
-                Console.WriteLine($"Start processing file: {filename}");
-
-                try
-                {
-                    var result = await parser.ParseFileAsync(filename);
-
-                    if (result is null)
-                        Console.WriteLine("Parse result is null");
-                    else
-                    {
-                        Console.WriteLine($"{result.EdiItems.Count} items parsed.");
-                        Console.WriteLine($"Hash: {result.SourceHash}");
-                        foreach (var item in result.EdiItems)
-                            Console.WriteLine(item);
-
-                        Console.WriteLine("");
-                        Console.WriteLine("");
-
-                        Console.WriteLine("Preparing to save data");
-                        int count = await dataService!.SaveItems(result);
-
-                        Console.WriteLine($"Number of items saved: {count}");
-
-                        Console.WriteLine("Moving file");
-                        string moved = fileMover.MoveCompletedFile(filename);
-                        Console.WriteLine($"File moved to {moved}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-
-            }
+            Console.WriteLine("No files found");
+            Console.WriteLine("Press any key to exit");
+            Environment.Exit(0);
         }
 
-        Console.WriteLine("Press any key to continue.");
+        Console.WriteLine($"Found {files.Length} files to process");
+
+        foreach (var filename in files)
+        {
+
+            Console.WriteLine($"Start processing file: {filename}");
+
+            try
+            {
+                var result = await parser.ParseFileAsync(filename);
+
+                if (result is null)
+                    Console.WriteLine("Parse result is null");
+                else
+                {
+                    Console.WriteLine($"{result.EdiItems.Count} items parsed.");
+                    Console.WriteLine($"Hash: {result.SourceHash}");
+                    foreach (var item in result.EdiItems)
+                        Console.WriteLine(item);
+
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+
+                    Console.WriteLine("Preparing to save data");
+                    int count = await dataService!.SaveItems(result);
+
+                    Console.WriteLine($"Number of items saved: {count}");
+
+                    Console.WriteLine("Moving file");
+                    string moved = fileMover.MoveCompletedFile(filename);
+                    Console.WriteLine($"File moved to {moved}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+        }
+
+
+
+        Console.WriteLine("You can now close the moto-server window to stop the server");
+        Console.WriteLine("Press any key to exit");
         Console.ReadKey();
+        Environment.Exit(0);
     }
 
-    /*
-    private static void RunBatchFile(string filename)
-    {
-        if (String.IsNullOrWhiteSpace(filename)) 
-            return;
 
-        // TODO: troubleshoot this
-        if (!File.Exists(filename))
-            return;
+    /// <summary>
+    /// Runs batch file to start moto-server and setup s3 files
+    /// </summary>
+    private static Process? RunServerStartupBatchFile()
+    {
+        string batchFileLocation = @".\Scripts\start-moto-and-setup-s3.bat";
+
+        if (String.IsNullOrWhiteSpace(batchFileLocation))
+            throw new Exception("Startup batch file location required");
+
+        if (!File.Exists(batchFileLocation))
+            throw new FileNotFoundException(batchFileLocation);
+
+        string filename = Path.GetFileName(batchFileLocation);
 
         ProcessStartInfo psi = new(filename)
         {
             CreateNoWindow = false,
-            UseShellExecute = false,
+            UseShellExecute = true,
             WindowStyle = ProcessWindowStyle.Normal,
-            WorkingDirectory = Path.GetDirectoryName(filename)
+            WorkingDirectory = Path.GetFullPath(Path.GetDirectoryName(batchFileLocation)!),
         };
 
-        Process.Start(psi);
+        return Process.Start(psi);
     }
-    */
+
 }
