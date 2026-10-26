@@ -2,6 +2,7 @@
 using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Framework.Readers;
+using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -30,6 +31,20 @@ public class EdiParser : IEdiParser
 
     public async Task<ParseResult> ParseStreamAsync(Stream stream)
     {
+        ConcurrentQueue<IEdiItem> ediItems = [];
+
+        using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
+        {
+            while (await ediReader.ReadAsync())
+                ediItems.Enqueue(ediReader.Item);            
+        }
+
+        return this.CreateParseResultFromEdiItems(ediItems?.ToList());
+    }
+
+    /*
+    public async Task<ParseResult> ParseStreamAsync(Stream stream)
+    {
         List<IEdiItem>? ediItems;
         
         using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
@@ -41,6 +56,8 @@ public class EdiParser : IEdiParser
 
         return this.CreateParseResultFromEdiItems(ediItems);
     }
+    */
+
 
     public ParseResult ParseStream(Stream stream)
     {
@@ -68,7 +85,7 @@ public class EdiParser : IEdiParser
 
         ParseResult result;
 
-        using (var stream = File.OpenRead(filename))
+        using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
             result = await this.ParseStreamAsync(stream);
 
         if (result is null)
