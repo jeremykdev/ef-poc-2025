@@ -1,4 +1,6 @@
 ﻿using DotNetEnv;
+using EdiFabric.Core.Model.Edi;
+using EdiIngestConsole.Validations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
@@ -25,6 +27,7 @@ internal class Program
         services.AddTransient<IDataService, DataService>();
         services.AddTransient<IFileMover, FileMover>();
         services.AddTransient<IFileDownloader, AwsFileDownloader>();
+        services.AddTransient<IValidator, Validator>();
 
         var provider = services.BuildServiceProvider();
 
@@ -32,6 +35,7 @@ internal class Program
         IDataService dataService = provider.GetService<IDataService>()!;
         IFileMover fileMover = provider.GetService<IFileMover>()!;
         IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
+        IValidator validator = provider.GetService<IValidator>()!;
 
         // where we are putting files that we get from s3 
         string targetDirectory = @".\from-s3";
@@ -65,7 +69,19 @@ internal class Program
                     Console.WriteLine($"{result.EdiItems.Count} items parsed.");
                     Console.WriteLine($"Hash: {result.SourceHash}");
                     foreach (var item in result.EdiItems)
+                    {
                         Console.WriteLine(item);
+
+                        if (item is EdiMessage)
+                        {
+                            Console.WriteLine("validating...");
+                            ValidationResult vr = validator.Validate(item as EdiMessage);
+                            Console.WriteLine(vr.ToString('\n'));
+                        }
+
+                        Console.WriteLine("");
+                        Console.WriteLine("");
+                    }
 
                     Console.WriteLine("");
                     Console.WriteLine("");
