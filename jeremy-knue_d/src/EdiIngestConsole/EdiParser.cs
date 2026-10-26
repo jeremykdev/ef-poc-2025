@@ -39,7 +39,7 @@ public class EdiParser : IEdiParser
                 ediItems.Enqueue(ediReader.Item);            
         }
 
-        return this.CreateParseResultFromEdiItems(ediItems?.ToList());
+        return this.CreateParseResultFromEdiItems(ediItems?.Where(x => x is not null)?.ToList());
     }
 
     /*
