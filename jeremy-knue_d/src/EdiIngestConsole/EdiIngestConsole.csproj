@@ -26,7 +26,7 @@
     <None Update="837-malformed.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="837.txt">
+    <None Update="837-fail-snip3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Empty.txt">
