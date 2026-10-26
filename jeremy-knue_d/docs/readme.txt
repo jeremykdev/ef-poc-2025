@@ -13,6 +13,16 @@ EDI_KEY contains the EdiFabric license key
 
 SQL_CONN contains the connection string for the SQL Server database.
 
+AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY contain dummy values for AWS credentials. The values are not validated but must be provided to successfully connect to AWS mock.
+
+S3_BUCKET_NAME contains the bucket name to use when pulling files from AWS S3 mock.
+
+S3_SERVICE_URL contains the AWS URL to use.  This should contain the moto server mock URL.
+
+SNIP_VALIDATION_LEVEL to check.  Should contain an integer that maps to a ValidationLevel, other a default will be used.
+See: https://www.edifabric.com/api/html/T_EdiFabric_Core_Model_Edi_ValidationLevel.htm
+
+
 Example connection string containing the name of the database to use or create.  In this case "EDI".
 .\SQLExpress;Integrated Security=True;Initial Catalog=EDI;TrustServerCertificate=True;
 
@@ -22,6 +32,11 @@ File template ======================================
 GREET={some greeting}
 EDI_KEY={EdiFrabric key}
 SQL_CONN=Server={SQL Server connection string}
+AWS_ACCESS_KEY_ID={credential value}
+AWS_SECRET_ACCESS_KEY={credential value}
+S3_BUCKET_NAME={bucket name}
+S3_SERVICE_URL={AWS mock URL}
+SNIP_VALIDATION_LEVEL={SNIP validation level}
 
 ======================================
 
@@ -30,6 +45,11 @@ Example file content ======================================
 GREET=Starting application
 EDI_KEY=ABC0001xyz
 SQL_CONN=Server=.\SQLExpress;Integrated Security=True;Initial Catalog=EDI;TrustServerCertificate=True;
+AWS_ACCESS_KEY_ID=DummyValue1
+AWS_SECRET_ACCESS_KEY=DummyValue2
+S3_BUCKET_NAME=EdiDemo
+S3_SERVICE_URL=http://127.0.0.1:5000
+SNIP_VALIDATION_LEVEL=2
 
 ======================================
 
@@ -48,6 +68,9 @@ The project currently writes the following files to the output directory.
 837.txt - a valid 837 file
 Empty.txt - a blank text file
 837-malformed.txt - a malformed EDI file
+837-fails-snip2.txt - same as 837.txt but edited BHT record on line 4 to change valid 'CH' to invalid code 'ZZ1'.  This causes it to fail SNIP level 2 validation.
+837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
+
 
 To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name.
 

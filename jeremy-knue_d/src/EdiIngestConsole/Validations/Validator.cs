@@ -3,6 +3,14 @@ using EdiFabric.Core.Model.Edi.ErrorContexts;
 
 namespace EdiIngestConsole.Validations;
 
+/// <summary>
+/// Performs SNIP validation
+/// </summary>
+/// <remarks>
+/// Depends on SNIP level in enviroment variable "SNIP_VALIDATION_LEVEL"
+/// Value should be an integer that maps to a ValidationLevel enum value
+/// see: https://www.edifabric.com/api/html/T_EdiFabric_Core_Model_Edi_ValidationLevel.htm
+/// </remarks>
 public class Validator : IValidator
 {
     protected const ValidationLevel DefaultValidationLevel = ValidationLevel.SyntaxOnly_SNIP1;

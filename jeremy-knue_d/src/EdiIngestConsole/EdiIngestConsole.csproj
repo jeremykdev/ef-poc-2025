@@ -23,6 +23,9 @@
     <None Update=".env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="837-fails-snip2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="837-malformed.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
