@@ -76,7 +76,11 @@ internal class Program
                         {
                             Console.WriteLine("validating...");
                             ValidationResult vr = validator.Validate(item as EdiMessage);
+
+                            var consoleColor = vr.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
+                            Console.ForegroundColor = consoleColor;
                             Console.WriteLine(vr.ToString('\n'));
+                            Console.ResetColor();
                         }
 
                         Console.WriteLine("");
