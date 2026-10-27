@@ -28,14 +28,18 @@ public class ValidationResult
         return this.ToString(';');
     }
 
-    public string ToString(char delimiter)
+    public string ToString(char delimiter, bool messagesOnly = false)
     {
         StringBuilder builder = new();
-        builder.Append($"Is valid: {this.IsValid()}");
+
+        if (!messagesOnly)
+            builder.Append($"Is valid: {this.IsValid()}");
 
         foreach(var item in this.ErrorMessages)
         {
-            builder.Append(delimiter);
+            if(builder.Length > 0)
+                builder.Append(delimiter);
+
             builder.Append(item);
         }
 

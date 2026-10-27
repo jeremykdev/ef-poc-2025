@@ -12,14 +12,14 @@ aws --endpoint-url http://127.0.0.1:5000 s3 mb s3://EdiDemo
 
 
 REM copy files to bucket 
-aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837.txt" s3://EdiDemo/
+REM aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837.txt" s3://EdiDemo/
 
-aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-malformed.txt" s3://EdiDemo/
+REM aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-malformed.txt" s3://EdiDemo/
 
 aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fail-snip3.txt" s3://EdiDemo/
 
-aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fails-snip2.txt" s3://EdiDemo/
+REM aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fails-snip2.txt" s3://EdiDemo/
 
-aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fail-syntax.txt" s3://EdiDemo/
+REM aws --endpoint-url http://127.0.0.1:5000 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fail-syntax.txt" s3://EdiDemo/
 
 pause

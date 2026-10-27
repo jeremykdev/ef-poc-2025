@@ -3,6 +3,7 @@ using EdiFabric.Core.Model.Edi.X12;
 using EdiFabric.Templates.Hipaa5010;
 using EdiIngestConsole.Models;
 using Microsoft.EntityFrameworkCore;
+using EdiIngestConsole.Validations;
 
 namespace EdiIngestConsole;
 

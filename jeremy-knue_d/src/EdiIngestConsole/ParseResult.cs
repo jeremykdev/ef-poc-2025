@@ -17,4 +17,6 @@ public class ParseResult
     /// </summary>
     /// <remarks>Used to detect duplicate</remarks>
     public string? SourceHash { get; set; }
+
+    public List<Validations.ValidationResult> ValidationResults { get; set; } = [];
 }

@@ -8041,6 +8041,10 @@ namespace EdiIngestConsole.Migrations
                     b.Property<bool>("Success")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ValidationIssues")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("History");

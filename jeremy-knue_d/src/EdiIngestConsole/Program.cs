@@ -66,6 +66,7 @@ internal class Program
                     Console.WriteLine("Parse result is null");
                 else
                 {
+                    ValidationResult? validationResult = null;
                     Console.WriteLine($"{result.EdiItems.Count} items parsed.");
                     Console.WriteLine($"Hash: {result.SourceHash}");
                     foreach (var item in result.EdiItems)
@@ -75,11 +76,14 @@ internal class Program
                         if (item is EdiMessage)
                         {
                             Console.WriteLine("validating...");
-                            ValidationResult vr = validator.Validate(item as EdiMessage);
+                            validationResult = validator.Validate(item as EdiMessage);
 
-                            var consoleColor = vr.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
+                            if (validationResult is not null)
+                                result.ValidationResults.Add(validationResult);
+
+                            var consoleColor = validationResult.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
                             Console.ForegroundColor = consoleColor;
-                            Console.WriteLine(vr.ToString('\n'));
+                            Console.WriteLine(validationResult.ToString('\n'));
                             Console.ResetColor();
                         }
 
