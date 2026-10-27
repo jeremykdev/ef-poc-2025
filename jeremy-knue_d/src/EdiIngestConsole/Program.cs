@@ -78,8 +78,7 @@ internal class Program
                             Console.WriteLine("validating...");
                             validationResult = validator.Validate(item as EdiMessage);
 
-                            if (validationResult is not null)
-                                result.ValidationResults.Add(validationResult);
+                            result.ValidationResults.Add(validationResult);
 
                             var consoleColor = validationResult.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
                             Console.ForegroundColor = consoleColor;
