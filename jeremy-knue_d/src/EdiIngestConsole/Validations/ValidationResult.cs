@@ -21,7 +21,7 @@ public class ValidationResult
     public bool IsValid() => !this.ErrorMessages.Any();
 
 
-    public string[] ErrorMessages = [];
+    public string[] ErrorMessages { get; set; } = [];
 
     public override string ToString()
     {
