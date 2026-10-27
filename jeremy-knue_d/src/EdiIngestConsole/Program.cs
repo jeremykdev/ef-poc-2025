@@ -55,7 +55,7 @@ internal class Program
 
         foreach (var filename in files)
         {
-
+            Console.WriteLine("===========================");
             Console.WriteLine($"Start processing file: {filename}");
 
             try
@@ -105,6 +105,9 @@ internal class Program
                 Console.WriteLine($"Error: {ex.Message}");
             }
 
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
         }
 
 
