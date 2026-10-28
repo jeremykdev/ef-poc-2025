@@ -5,14 +5,12 @@ using EdiFabric.Core.Model.Edi.X12;
 namespace EdiIngestConsole.Validations;
 
 /// <summary>
-/// Performs SNIP and Syntax validation
+/// Performs SNIP validation
 /// </summary>
 /// <remarks>
 /// Depends on SNIP level in enviroment variable "SNIP_VALIDATION_LEVEL"
 /// Value should be an integer that maps to a ValidationLevel enum value
 /// see: https://www.edifabric.com/api/html/T_EdiFabric_Core_Model_Edi_ValidationLevel.htm
-/// Checks extended syntax
-/// See: https://www.edifabric.com/docs/edifabric-net/validate-edi-with-templates.html#how-to-validate-x12-data-types
 /// </remarks>
 public class Validator : IValidator
 {
@@ -28,7 +26,6 @@ public class Validator : IValidator
         ValidationSettings settings = new()
         {
             ValidationLevel = validationLevel,
-            SyntaxSet = new Extended(),
         };
 
         MessageErrorContext? errorContext = null;

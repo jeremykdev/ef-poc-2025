@@ -70,7 +70,7 @@ Empty.txt - a blank text file
 837-malformed.txt - a malformed EDI file
 837-fails-snip2.txt - same as 837.txt but edited BHT record on line 4 to change valid 'CH' to invalid code 'ZZ'.  This causes it to fail SNIP level 2 validation.
 837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
-837-fail-syntax.txt - same as 837.txt but edited name (NM1) at line 9 to contain caret ^ characters which should fail syntax validation.
+
 
 To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name.
 
