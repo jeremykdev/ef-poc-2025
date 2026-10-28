@@ -37,14 +37,8 @@ public class DataService(EdiDbContext dbContext) : IDataService
             }
         }
 
-        // only save items from a valid parse,
-        // avoid partial processing of malformed file
-        // avoid partial processing of file with validation errors
-        if (parseResult.Success && 
-            parseResult.EdiItems is not null && 
-            !duplcateFile &&
-            !parseResult.HasAnyValidationErrors()
-            )
+   
+        if (ShouldSaveEdiItems(parseResult, duplcateFile))
         {
             foreach (var item in parseResult.EdiItems)
             {
@@ -72,6 +66,30 @@ public class DataService(EdiDbContext dbContext) : IDataService
 
         int result = await dbContext.SaveChangesAsync();
         return result;
+    }
+
+    /// <summary>
+    /// Should EDI Items be saved
+    /// </summary>
+    /// <remarks>
+    /// Should only save EDI items when
+    ///  1) Is not a duplicate
+    ///  2) Parse successful
+    ///  3) There is at least one non null EDI item
+    ///  4) There are no validation results with errors
+    /// </remarks>
+    public static bool ShouldSaveEdiItems(ParseResult parseResult, bool isDuplicateFile)
+    {
+        if (isDuplicateFile)
+            return false;
+
+        return (
+            parseResult.Success &&
+            parseResult.EdiItems is not null &&
+            parseResult.EdiItems.Any(x => x is not null) &&
+            !(parseResult.ValidationResults ?? []).Any(x => !x.IsValid())
+            );
+
     }
 }
 

@@ -26,6 +26,5 @@ public class ParseResult
             return false;
 
         return this.ValidationResults.Any(x => !x.IsValid());
-    }
-    
+    }   
 }
