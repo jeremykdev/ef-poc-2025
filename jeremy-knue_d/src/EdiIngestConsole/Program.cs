@@ -85,9 +85,6 @@ internal class Program
                             Console.WriteLine(validationResult.ToString('\n'));
                             Console.ResetColor();
                         }
-
-                        Console.WriteLine("");
-                        Console.WriteLine("");
                     }
 
                     Console.WriteLine("");

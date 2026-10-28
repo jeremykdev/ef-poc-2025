@@ -19,4 +19,13 @@ public class ParseResult
     public string? SourceHash { get; set; }
 
     public List<Validations.ValidationResult> ValidationResults { get; set; } = [];
+
+    public bool HasAnyValidationErrors()
+    {
+        if (this.ValidationResults is null || !this.ValidationResults.Any())
+            return false;
+
+        return this.ValidationResults.Any(x => !x.IsValid());
+    }
+    
 }
