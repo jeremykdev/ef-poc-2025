@@ -51,5 +51,110 @@ public class DataServiceTests
         // assert
         this._dbContextMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
-     
+
+
+    [Test]
+    public void ShouldSaveEdiItems_Should_Return_False_When_isDuplicateFile_Is_True()
+    {
+        // arrange
+        bool isDuplicate = true;
+        ParseResult parseResult = new();
+
+        // act
+        bool result = DataService.ShouldSaveEdiItems(parseResult, isDuplicate);
+
+        // assert
+        Assert.That(result, Is.False);
+    }
+
+
+    [Test]
+    public void ShouldSaveEdiItems_Should_Return_False_When_ParseResult_Success_IsFalse()
+    {
+        // arrange
+        bool isDuplicate = false;
+        ParseResult parseResult = new()
+        {
+            Success = false,
+            EdiItems = [new ISA()],
+            ValidationResults = [new EdiIngestConsole.Validations.ValidationResult()]
+        };
+
+        // act
+        bool result = DataService.ShouldSaveEdiItems(parseResult, isDuplicate);
+
+        // assert
+        Assert.That(result, Is.False);
+    }
+
+
+    [Test]
+    public void ShouldSaveEdiItems_Should_Return_False_When_ParseResult_EdiItems_Is_Null()
+    {
+        // arrange
+        bool isDuplicate = false;
+        ParseResult parseResult = new()
+        {
+            Success = true,
+            EdiItems = null,
+            ValidationResults = [new EdiIngestConsole.Validations.ValidationResult()]
+        };
+
+        // act
+        bool result = DataService.ShouldSaveEdiItems(parseResult, isDuplicate);
+
+        // assert
+        Assert.That(result, Is.False);
+    }
+
+
+    
+    [Test]
+    public void ShouldSaveEdiItems_Should_Return_False_When_ParseResult_ValidationResults_Contains_Errors()
+    {
+        // arrange
+        bool isDuplicate = false;
+
+        var validationResult = new EdiIngestConsole.Validations.ValidationResult
+        {
+            ErrorMessages = ["Error 1", "Error 2"]
+        };
+
+
+        ParseResult parseResult = new()
+        {
+            Success = true,
+            EdiItems = [new ISA()],
+            ValidationResults = [validationResult]
+        };
+
+        // act
+        bool result = DataService.ShouldSaveEdiItems(parseResult, isDuplicate);
+
+        // assert
+        Assert.That(result, Is.False);
+    }
+
+
+    [Test]
+    public void ShouldSaveEdiItems_Should_Return_True_When_All_Criteria_Met()
+    {
+        // arrange
+        bool isDuplicate = false;
+
+        var validationResult = new EdiIngestConsole.Validations.ValidationResult();
+        
+        ParseResult parseResult = new()
+        {
+            Success = true,
+            EdiItems = [new ISA()],
+            ValidationResults = [validationResult]
+        };
+
+        // act
+        bool result = DataService.ShouldSaveEdiItems(parseResult, isDuplicate);
+
+        // assert
+        Assert.That(result, Is.True);
+    }
 }

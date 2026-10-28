@@ -80,6 +80,8 @@ public class DataService(EdiDbContext dbContext) : IDataService
     /// </remarks>
     public static bool ShouldSaveEdiItems(ParseResult parseResult, bool isDuplicateFile)
     {
+        ArgumentNullException.ThrowIfNull(parseResult);
+
         if (isDuplicateFile)
             return false;
 
