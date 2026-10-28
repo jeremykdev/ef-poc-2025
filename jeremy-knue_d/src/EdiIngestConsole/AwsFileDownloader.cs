@@ -33,6 +33,18 @@ public class AwsFileDownloader : IFileDownloader
         this._serviceUrl = Environment.GetEnvironmentVariable("S3_SERVICE_URL");
     }
 
+
+    private AmazonS3Client CreateS3Client()
+    {
+        AmazonS3Config s3Config = new()
+        {
+            ServiceURL = this._serviceUrl!
+        };
+
+        return new(s3Config);        
+    }
+
+
     private TransferUtility CreateTransferUtility()
     {
         if (this._serviceUrl is null)
@@ -41,17 +53,19 @@ public class AwsFileDownloader : IFileDownloader
         if (!ValidateIsUrl(this._serviceUrl))
             throw new Exception($"Service URL is invalid: {this._serviceUrl}");
 
-        AmazonS3Config s3Config = new()
-        {
-            ServiceURL = this._serviceUrl!
-        };
-
-        AmazonS3Client s3Client = new(s3Config);
-
+        var s3Client = this.CreateS3Client();
+       
         TransferUtility transferUtility = new(s3Client);
 
         return transferUtility;
     }
+
+    // TODO: add method to get listing of objects/files in bucket
+
+    // TODO: add method to get object/file from bucket as stream
+
+    // TODO: support IDispose for AmazonS3Client 
+    // may need to make instance a class level variable and mark class as IDispose then dispose of client when instance disposed
 
     public async Task DownloadFiles(string destinationDirectory)
     {
