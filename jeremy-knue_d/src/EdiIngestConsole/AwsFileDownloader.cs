@@ -13,7 +13,7 @@ namespace EdiIngestConsole;
 /// AWS_ACCESS_KEY_ID - aws credential
 /// AWS_SECRET_ACCESS_KEY - aws credential
 /// </remarks>
-public class AwsFileDownloader : IFileDownloader
+public class AwsFileDownloader : IFileDownloader, IDisposable
 {
     /// <summary>
     /// Bucket name
@@ -27,10 +27,13 @@ public class AwsFileDownloader : IFileDownloader
     /// <remarks>Depends on environment variable named "S3_SERVICE_URL"</remarks>
     private readonly string? _serviceUrl;
 
+    private AmazonS3Client _s3Client; 
+
     public AwsFileDownloader()
     {
         this._bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
         this._serviceUrl = Environment.GetEnvironmentVariable("S3_SERVICE_URL");
+        this._s3Client = this.CreateS3Client();    
     }
 
 
@@ -52,10 +55,8 @@ public class AwsFileDownloader : IFileDownloader
 
         if (!ValidateIsUrl(this._serviceUrl))
             throw new Exception($"Service URL is invalid: {this._serviceUrl}");
-
-        var s3Client = this.CreateS3Client();
        
-        TransferUtility transferUtility = new(s3Client);
+        TransferUtility transferUtility = new(this._s3Client);
 
         return transferUtility;
     }
@@ -64,9 +65,7 @@ public class AwsFileDownloader : IFileDownloader
 
     // TODO: add method to get object/file from bucket as stream
 
-    // TODO: support IDispose for AmazonS3Client 
-    // may need to make instance a class level variable and mark class as IDispose then dispose of client when instance disposed
-
+    
     public async Task DownloadFiles(string destinationDirectory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(destinationDirectory);
@@ -101,6 +100,11 @@ public class AwsFileDownloader : IFileDownloader
         }
 
         return false;
+    }
+
+    public void Dispose()
+    {
+        this._s3Client?.Dispose();
     }
 }
 
