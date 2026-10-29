@@ -31,13 +31,13 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
     /// <remarks>Depends on environment variable named "S3_SERVICE_URL"</remarks>
     private readonly string? _serviceUrl;
 
-    private AmazonS3Client _s3Client; 
+    private AmazonS3Client _s3Client;
 
     public AwsFileDownloader()
     {
         this._bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
         this._serviceUrl = Environment.GetEnvironmentVariable("S3_SERVICE_URL");
-        this._s3Client = this.CreateS3Client();    
+        this._s3Client = this.CreateS3Client();
     }
 
 
@@ -54,13 +54,13 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
             ServiceURL = this._serviceUrl!
         };
 
-        return new(s3Config);        
+        return new(s3Config);
     }
 
 
-    private TransferUtility CreateTransferUtility() => new(this._s3Client);    
+    private TransferUtility CreateTransferUtility() => new(this._s3Client);
 
-    
+
     public async Task DownloadFiles(string destinationDirectory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(destinationDirectory);
@@ -68,7 +68,7 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
         // check for bucket name, cannot proceed if not set
         if (String.IsNullOrWhiteSpace(this._bucketName))
             throw new Exception("S3 bucket name not set");
-       
+
         if (!Directory.Exists(destinationDirectory))
             Directory.CreateDirectory(destinationDirectory);
 
@@ -82,8 +82,8 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
 
         Console.WriteLine($"Download response: {response.Result}");
     }
-      
-         
+
+
     public async Task<List<S3Object>> List3Objects()
     {
         ListObjectsV2Request listRequest = new()
@@ -98,7 +98,7 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
         await foreach (var response in paginator.Responses)
         {
             foreach (var obj in response.S3Objects)
-                bag.Add(obj);     
+                bag.Add(obj);
         }
 
         return bag.ToList();
@@ -117,7 +117,13 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
 
         var response = await this._s3Client.GetObjectAsync(objectRequest);
 
-        return response.ResponseStream;
+        // the Amazon stream does not support seek, copy to memory stream
+        using var responseStream = response.ResponseStream;
+
+        var memStream = new MemoryStream();
+        responseStream.CopyTo(memStream);
+        memStream.Seek(0, SeekOrigin.Begin);
+        return memStream;
     }
 
     private static bool ValidateIsUrl(string? input)

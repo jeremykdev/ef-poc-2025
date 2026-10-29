@@ -19,6 +19,7 @@ public class EdiParser : IEdiParser
     protected X12ReaderSettings _defaultX12ReaderSettings = new()
     {
         ContinueOnError = true,
+        LeaveOpen = true, // don't close stream, leave open so it can be read again to create hash
     };
 
     protected const string TemplateName = "EdiFabric.Templates.Hipaa";
@@ -29,7 +30,7 @@ public class EdiParser : IEdiParser
         License.SetSerial(licenseKey);
     }
 
-    public async Task<ParseResult> ParseStreamAsync(Stream stream)
+    public async Task<ParseResult> ParseStreamAsync(Stream stream, string? filename = null)
     {
         ConcurrentQueue<IEdiItem> ediItems = [];
 
@@ -39,7 +40,14 @@ public class EdiParser : IEdiParser
                 ediItems.Enqueue(ediReader.Item);            
         }
 
-        return this.CreateParseResultFromEdiItems(ediItems?.Where(x => x is not null)?.ToList());
+        var parseResult = this.CreateParseResultFromEdiItems(ediItems);
+        parseResult.SourceHash = CreateHashFromStream(stream);
+
+        if (!String.IsNullOrWhiteSpace(filename))
+            parseResult.SourceFileName = filename;
+
+        return parseResult;
+
     }
 
     /*
@@ -59,7 +67,7 @@ public class EdiParser : IEdiParser
     */
 
 
-    public ParseResult ParseStream(Stream stream)
+    public ParseResult ParseStream(Stream stream, string? filename = null)
     {
        List<IEdiItem>? ediItems;
 
@@ -71,7 +79,13 @@ public class EdiParser : IEdiParser
                         .ToList();
         }
 
-        return this.CreateParseResultFromEdiItems(ediItems);
+        var parseResult = this.CreateParseResultFromEdiItems(ediItems);
+        parseResult.SourceHash = CreateHashFromStream(stream);
+        
+        if(!String.IsNullOrWhiteSpace(filename)) 
+            parseResult.SourceFileName = filename;
+        
+        return parseResult;
     }
 
     public async Task<ParseResult> ParseFileAsync(string filename)
@@ -123,7 +137,14 @@ public class EdiParser : IEdiParser
 
     private static string CreateHash(string filename)
     {
-        using Stream stream = File.OpenRead(filename);
+        using Stream stream = File.OpenRead(filename);         
+        return CreateHashFromStream(stream);
+    }
+
+    private static string CreateHashFromStream(Stream stream)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        stream.Position = 0;
         byte[] hash = SHA256.HashData(stream);
         return Convert.ToHexString(hash);
     }
@@ -182,7 +203,7 @@ public interface IEdiParser
     ParseResult ParseFile(string filename);
     Task<ParseResult> ParseFileAsync(string filename);
 
-    Task<ParseResult> ParseStreamAsync(Stream stream);
+    Task<ParseResult> ParseStreamAsync(Stream stream, string? filename = null);
 
-    ParseResult ParseStream(Stream stream);
+    ParseResult ParseStream(Stream stream, string? filename = null);
 }

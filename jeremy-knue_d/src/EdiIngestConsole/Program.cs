@@ -68,7 +68,7 @@ internal class Program
                 ParseResult result;
                 using (var stream = await fileDownloader.GetStream(file.Key))
                 {
-                    result = await parser.ParseStreamAsync(stream);
+                    result = await parser.ParseStreamAsync(stream, file.Key);
                 }
 
                 if (result is null)
