@@ -181,4 +181,8 @@ public interface IEdiParser
 {
     ParseResult ParseFile(string filename);
     Task<ParseResult> ParseFileAsync(string filename);
+
+    Task<ParseResult> ParseStreamAsync(Stream stream);
+
+    ParseResult ParseStream(Stream stream);
 }

@@ -1,4 +1,5 @@
-﻿using DotNetEnv;
+﻿using Amazon.S3.Model;
+using DotNetEnv;
 using EdiFabric.Core.Model.Edi;
 using EdiIngestConsole.Validations;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,30 +38,38 @@ internal class Program
         IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
         IValidator validator = provider.GetService<IValidator>()!;
 
-        // where we are putting files that we get from s3 
-        string targetDirectory = @".\from-s3";
+        List<S3Object> s3Items = [];
 
-        await fileDownloader.DownloadFiles(targetDirectory);
-
-        var files = Directory.GetFiles(targetDirectory);
-
-        if (files is null || !files.Any())
+        try
         {
-            Console.WriteLine("No files found");
-            Console.WriteLine("Press any key to exit");
-            Environment.Exit(0);
+            s3Items = await fileDownloader.List3Objects();
+
+            if (s3Items is null || s3Items.Count == 0)
+            {
+                Console.WriteLine("No files found on server");
+                Console.WriteLine("Press any key to exit");
+                Environment.Exit(0);
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
         }
 
-        Console.WriteLine($"Found {files.Length} files to process");
+        Console.WriteLine($"Found {s3Items.Count} files to process");
 
-        foreach (var filename in files)
+        foreach (var file in s3Items)
         {
             Console.WriteLine("===========================");
-            Console.WriteLine($"Start processing file: {filename}");
+            Console.WriteLine($"Start processing file/object: {file.Key}");
 
             try
-            {
-                var result = await parser.ParseFileAsync(filename);
+            {                
+                ParseResult result;
+                using (var stream = await fileDownloader.GetStream(file.Key))
+                {
+                    result = await parser.ParseStreamAsync(stream);
+                }
 
                 if (result is null)
                     Console.WriteLine("Parse result is null");
@@ -94,10 +103,6 @@ internal class Program
                     int count = await dataService!.SaveItems(result);
 
                     Console.WriteLine($"Number of items saved: {count}");
-
-                    Console.WriteLine("Moving file");
-                    string moved = fileMover.MoveCompletedFile(filename);
-                    Console.WriteLine($"File moved to {moved}");
                 }
             }
             catch (Exception ex)
@@ -109,8 +114,6 @@ internal class Program
             Console.WriteLine("");
             Console.WriteLine("");
         }
-
-
 
         Console.WriteLine("You can now close the moto-server window to stop the server");
         Console.WriteLine("Press any key to exit");

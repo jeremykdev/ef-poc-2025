@@ -1,5 +1,9 @@
-﻿using Amazon.S3;
+﻿using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Azure.Core;
+using System.Collections.Concurrent;
 
 namespace EdiIngestConsole;
 
@@ -39,6 +43,12 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
 
     private AmazonS3Client CreateS3Client()
     {
+        if (this._serviceUrl is null)
+            throw new Exception("S3 Service URL not set");
+
+        if (!ValidateIsUrl(this._serviceUrl))
+            throw new Exception($"Service URL is invalid: {this._serviceUrl}");
+
         AmazonS3Config s3Config = new()
         {
             ServiceURL = this._serviceUrl!
@@ -48,22 +58,7 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
     }
 
 
-    private TransferUtility CreateTransferUtility()
-    {
-        if (this._serviceUrl is null)
-            throw new Exception("S3 Service URL not set");
-
-        if (!ValidateIsUrl(this._serviceUrl))
-            throw new Exception($"Service URL is invalid: {this._serviceUrl}");
-       
-        TransferUtility transferUtility = new(this._s3Client);
-
-        return transferUtility;
-    }
-
-    // TODO: add method to get listing of objects/files in bucket
-
-    // TODO: add method to get object/file from bucket as stream
+    private TransferUtility CreateTransferUtility() => new(this._s3Client);    
 
     
     public async Task DownloadFiles(string destinationDirectory)
@@ -87,7 +82,43 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
 
         Console.WriteLine($"Download response: {response.Result}");
     }
+      
+         
+    public async Task<List<S3Object>> List3Objects()
+    {
+        ListObjectsV2Request listRequest = new()
+        {
+            BucketName = this._bucketName,
+        };
 
+        var paginator = this._s3Client.Paginators.ListObjectsV2(listRequest);
+
+        ConcurrentBag<S3Object> bag = [];
+
+        await foreach (var response in paginator.Responses)
+        {
+            foreach (var obj in response.S3Objects)
+                bag.Add(obj);     
+        }
+
+        return bag.ToList();
+    }
+
+
+    public async Task<Stream> GetStream(string key)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+
+        GetObjectRequest objectRequest = new()
+        {
+            BucketName = this._bucketName,
+            Key = key
+        };
+
+        var response = await this._s3Client.GetObjectAsync(objectRequest);
+
+        return response.ResponseStream;
+    }
 
     private static bool ValidateIsUrl(string? input)
     {
@@ -102,6 +133,7 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
         return false;
     }
 
+
     public void Dispose()
     {
         this._s3Client?.Dispose();
@@ -111,6 +143,9 @@ public class AwsFileDownloader : IFileDownloader, IDisposable
 
 public interface IFileDownloader
 {
-    public Task DownloadFiles(string destinationDirectory);
-}
+    Task DownloadFiles(string destinationDirectory);
 
+    Task<List<S3Object>> List3Objects();
+
+    Task<Stream> GetStream(string key);
+}
