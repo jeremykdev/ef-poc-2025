@@ -2,6 +2,7 @@
 using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Core.Model.Edi.X12;
 using EdiIngestConsole.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EdiIngestConsole.Validations;
 
@@ -38,9 +39,20 @@ public class Validator : IValidator
         if (errors is null || errors.Count == 0)
             return new();
 
+        List<string> errorMessages = [];
+        foreach(var err in errors.Where(x => x is not null))
+        {
+            foreach(var innerError in err.Errors.Where(x => x is not null))
+            {
+                if (!String.IsNullOrWhiteSpace(innerError.Message))
+                    errorMessages.Add(innerError.Message);
+            }
+        }
+
+
         ValidationResult result = new()
         {
-            ErrorMessages = errors.Select(x => x.Message).ToArray()
+            ErrorMessages = errorMessages.ToArray()
         };
 
         return result;
