@@ -111,11 +111,12 @@ internal class Program
                     Console.WriteLine("");
                     Console.WriteLine("");
                    
+                    
                     Console.WriteLine("Preparing to save data");
                     int count = await dataService!.SaveItems(result);
 
                     Console.WriteLine($"Number of items saved: {count}");
-                    
+                     
                 }
             }
             catch (Exception ex)

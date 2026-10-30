@@ -1,6 +1,7 @@
 ﻿using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Core.Model.Edi.X12;
+using EdiIngestConsole.Models;
 
 namespace EdiIngestConsole.Validations;
 
@@ -26,6 +27,10 @@ public class Validator : IValidator
         {
             ValidationLevel = validationLevel,
         };
+
+        // if input is IEA convert to custom class to apply custom validation
+        if (controlSegment is IEA)
+            controlSegment = new IeaCustom((controlSegment as IEA)!);
 
         // list will be empty if/when segment is valid 
         List<SegmentErrorContext> errors = controlSegment.Validate(settings);

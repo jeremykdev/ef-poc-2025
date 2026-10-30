@@ -22,6 +22,8 @@ aws --endpoint-url http://127.0.0.1:4566 s3 cp "C:\Users\JeremyKnue\source\repos
 
 REM aws --endpoint-url http://127.0.0.1:4566 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fails-snip4.txt" s3://EdiDemo/
 
-aws --endpoint-url http://127.0.0.1:4566 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-custom-code-pass-snip5.txt"  s3://EdiDemo/
+aws --endpoint-url http://127.0.0.1:4566 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-custom-code-pass-snip5.txt" s3://EdiDemo/
+
+aws --endpoint-url http://127.0.0.1:4566 s3 cp "C:\Users\JeremyKnue\source\repos\jeremykdev\ef-poc-2025\jeremy-knue_d\src\EdiIngestConsole\837-fails-snip6-customIEA-validation.txt" s3://EdiDemo/
 
 pause
