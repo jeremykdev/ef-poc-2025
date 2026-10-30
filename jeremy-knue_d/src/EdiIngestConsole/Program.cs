@@ -84,8 +84,20 @@ internal class Program
 
                         if (item is EdiMessage)
                         {
-                            Console.WriteLine("validating...");
+                            Console.WriteLine($"validating EdiMessage {item.GetType()} ...");
                             validationResult = validator.Validate(item as EdiMessage);
+
+                            result.ValidationResults.Add(validationResult);
+
+                            var consoleColor = validationResult.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
+                            Console.ForegroundColor = consoleColor;
+                            Console.WriteLine(validationResult.ToString('\n'));
+                            Console.ResetColor();
+                        }
+                        else if (item is ControlSegment)
+                        {
+                            Console.WriteLine($"validating ControlSegment {item.GetType()}...");
+                            validationResult = validator.Validate(item as ControlSegment);
 
                             result.ValidationResults.Add(validationResult);
 
@@ -98,11 +110,12 @@ internal class Program
 
                     Console.WriteLine("");
                     Console.WriteLine("");
-
+                   
                     Console.WriteLine("Preparing to save data");
                     int count = await dataService!.SaveItems(result);
 
                     Console.WriteLine($"Number of items saved: {count}");
+                    
                 }
             }
             catch (Exception ex)

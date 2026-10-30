@@ -5,7 +5,7 @@ using EdiFabric.Core.Model.Edi.X12;
 namespace EdiIngestConsole.Validations;
 
 /// <summary>
-/// Performs SNIP validation
+/// Performs validation
 /// </summary>
 /// <remarks>
 /// Depends on SNIP level in enviroment variable "SNIP_VALIDATION_LEVEL"
@@ -16,6 +16,30 @@ public class Validator : IValidator
 {
     protected const ValidationLevel DefaultValidationLevel = ValidationLevel.SyntaxOnly_SNIP1;
 
+    public ValidationResult Validate(ControlSegment controlSegment)
+    {
+        ArgumentNullException.ThrowIfNull(controlSegment);
+
+        ValidationLevel validationLevel = this.GetValidationLevel();
+
+        ValidationSettings settings = new()
+        {
+            ValidationLevel = validationLevel,
+        };
+
+        // list will be empty if/when segment is valid 
+        List<SegmentErrorContext> errors = controlSegment.Validate(settings);
+
+        if (errors is null || errors.Count == 0)
+            return new();
+
+        ValidationResult result = new()
+        {
+            ErrorMessages = errors.Select(x => x.Message).ToArray()
+        };
+
+        return result;
+    }
 
     public ValidationResult Validate(EdiMessage message)
     {
@@ -76,4 +100,6 @@ public class Validator : IValidator
 public interface IValidator
 {
     ValidationResult Validate(EdiMessage message);
+
+    ValidationResult Validate(ControlSegment controlSegment);
 }
