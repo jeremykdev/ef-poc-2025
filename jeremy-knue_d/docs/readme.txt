@@ -63,8 +63,7 @@ This is currently done automatically by copying the file to the output directory
 Examples for both files above can be found in the samples directory.  Note that the .env file in samples has been named "sample.env.txt" to all the file to be included in git commits.  Normally .env files are ignored by git.
 
 
-3) In program.cs set the filename to process.  This is the filename variable.  
-The project currently writes the following files to the output directory.  
+3) Here are the example files that can used by the project to process:
 837.txt - a valid 837 file
 Empty.txt - a blank text file
 837-malformed.txt - a malformed EDI file
