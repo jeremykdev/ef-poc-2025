@@ -39,23 +39,10 @@ public class Validator : IValidator
         if (errors is null || errors.Count == 0)
             return new();
 
-        List<string> errorMessages = [];
-        foreach(var err in errors.Where(x => x is not null))
-        {
-            foreach(var innerError in err.Errors.Where(x => x is not null))
-            {
-                if (!String.IsNullOrWhiteSpace(innerError.Message))
-                    errorMessages.Add(innerError.Message);
-            }
-        }
-
-
-        ValidationResult result = new()
-        {
-            ErrorMessages = errorMessages.ToArray()
-        };
-
-        return result;
+        MessageErrorContext messageError = new();
+        messageError.AddRange(errors.Where(x => x is not null));
+        
+        return new(messageError);
     }
 
     public ValidationResult Validate(EdiMessage message)

@@ -37,7 +37,7 @@ public class IeaCustom : IEA, IEdiValidator
             resultErrorContext = new();
 
             DataElementErrorContext dataElemErr = new(
-                name: "InterchangeControlNumber",
+                name: "IEA",
                 position: validationContext.InSegmentIndex,
                 code: DataElementErrorCode.InvalidCodeValue,
                 componentPosition: validationContext.InCompositeIndex,
