@@ -14,17 +14,12 @@ namespace EdiIngestConsole;
 /// <summary>
 /// Main worker program.
 /// </summary>
-internal class Program
+public class Program
 {
     static async Task Main(string[] args)
     {
         Env.Load();
-
-        using var serverProcess = RunServerStartupBatchFile();
-
-        Console.WriteLine(Environment.GetEnvironmentVariable("GREET"));
-        Console.ReadKey();
-
+  
         // setup dependency injection
         ServiceCollection services = new();
         services.AddTransient<EdiDbContext>(); // note that connection string set in OnConfiguring
@@ -33,7 +28,7 @@ internal class Program
         services.AddTransient<IFileMover, FileMover>();
         services.AddTransient<IFileDownloader, AwsFileDownloader>();
         services.AddTransient<IValidator, Validator>();
-        services.AddTransient<IProcessor, S3Processor>();
+        services.AddTransient<IProcessor, LocalFileProcessor>();
 
         var provider = services.BuildServiceProvider();
 
@@ -147,30 +142,6 @@ internal class Program
     }
 
 
-    /// <summary>
-    /// Runs batch file to start moto-server and setup s3 files
-    /// </summary>
-    private static Process? RunServerStartupBatchFile()
-    {
-        string batchFileLocation = @".\Scripts\start-moto-and-setup-s3.bat";
-
-        if (String.IsNullOrWhiteSpace(batchFileLocation))
-            throw new Exception("Startup batch file location required");
-
-        if (!File.Exists(batchFileLocation))
-            throw new FileNotFoundException(batchFileLocation);
-
-        string filename = Path.GetFileName(batchFileLocation);
-
-        ProcessStartInfo psi = new(filename)
-        {
-            CreateNoWindow = false,
-            UseShellExecute = true,
-            WindowStyle = ProcessWindowStyle.Normal,
-            WorkingDirectory = Path.GetFullPath(Path.GetDirectoryName(batchFileLocation)!),
-        };
-
-        return Process.Start(psi);
-    }
+    
 
 }

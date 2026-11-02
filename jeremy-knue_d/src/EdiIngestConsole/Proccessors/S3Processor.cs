@@ -4,6 +4,7 @@ using EdiIngestConsole.Data;
 using EdiIngestConsole.FileManagement;
 using EdiIngestConsole.Parsers;
 using EdiIngestConsole.Validations;
+using System.Diagnostics;
 
 namespace EdiIngestConsole.Proccessors;
 
@@ -18,6 +19,11 @@ public class S3Processor(
     {
         try
         {
+            using var serverProcess = RunServerStartupBatchFile();
+
+            Console.WriteLine("Starting application, ensure that moto server scripts are running and S3 setup has completed before pressing any key to continue.");
+            Console.ReadLine();
+
             List<S3Object> s3Items = [];
 
             try
@@ -27,8 +33,7 @@ public class S3Processor(
                 if (s3Items is null || s3Items.Count == 0)
                 {
                     Console.WriteLine("No files found on server");
-                    Console.WriteLine("Press any key to exit");
-                    Environment.Exit(0);
+                    return;
                 }
             }
             catch (Exception ex)
@@ -115,5 +120,32 @@ public class S3Processor(
         {
             Console.WriteLine($"Exception while processing. Message: {ex.Message}");
         }
+    }
+
+
+    /// <summary>
+    /// Runs batch file to start moto-server and setup s3 files
+    /// </summary>
+    private static Process? RunServerStartupBatchFile()
+    {
+        string batchFileLocation = @".\Scripts\start-moto-and-setup-s3.bat";
+
+        if (String.IsNullOrWhiteSpace(batchFileLocation))
+            throw new Exception("Startup batch file location required");
+
+        if (!File.Exists(batchFileLocation))
+            throw new FileNotFoundException(batchFileLocation);
+
+        string filename = Path.GetFileName(batchFileLocation);
+
+        ProcessStartInfo psi = new(filename)
+        {
+            CreateNoWindow = false,
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Normal,
+            WorkingDirectory = Path.GetFullPath(Path.GetDirectoryName(batchFileLocation)!),
+        };
+
+        return Process.Start(psi);
     }
 }
