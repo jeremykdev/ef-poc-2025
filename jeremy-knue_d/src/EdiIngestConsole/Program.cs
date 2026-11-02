@@ -28,7 +28,7 @@ public class Program
         services.AddTransient<IFileMover, FileMover>();
         services.AddTransient<IFileDownloader, AwsFileDownloader>();
         services.AddTransient<IValidator, Validator>();
-        services.AddTransient<IProcessor, LocalFileProcessor>();
+        services.AddTransient<IProcessor, S3Processor>();
 
         var provider = services.BuildServiceProvider();
 
