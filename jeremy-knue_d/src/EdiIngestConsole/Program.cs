@@ -39,7 +39,7 @@ public class Program
 
         string processorKey = GetProcessorKey();
         IProcessor processor = provider.GetRequiredKeyedService<IProcessor>(processorKey);
-        await processor.ProcessAsync();
+        await processor.Process();
 
         Console.WriteLine("Press any key to exit");
         Console.ReadKey();
@@ -52,19 +52,19 @@ public class Program
     /// <remarks>
     /// One of the key values for AWS S3 vs LocalFile expected to exist in environment variable "PROCESSOR_KEY"
     /// If not found will default to LocalFile 
+    /// Match is case insensitve
     /// </remarks>
     private static string GetProcessorKey()
     {
         string envValue = Environment.GetEnvironmentVariable("PROCESSOR_KEY") ?? String.Empty;
 
-
-        if (envValue == KeyLocalFile)
+        if (envValue.Equals(KeyLocalFile, StringComparison.OrdinalIgnoreCase))
             return KeyLocalFile;
 
-        if (envValue == KeyS3)
+        if (envValue.Equals(KeyS3, StringComparison.OrdinalIgnoreCase))
             return KeyS3;
 
-        Console.WriteLine($"PROCESSOR_KEY {envValue} does not match any valid keys.  Will use default");
+        Console.WriteLine($"PROCESSOR_KEY {envValue} does not match any valid keys.  Will use default.");
         return KeyLocalFile;
     }
 

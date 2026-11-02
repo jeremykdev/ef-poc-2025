@@ -14,13 +14,13 @@ public class S3Processor : BaseProcessor, IProcessor
 
     }
 
-    public async Task ProcessAsync()
+    public async Task Process()
     {
         try
         {
             using var serverProcess = RunServerStartupBatchFile();
 
-            Console.WriteLine("Starting application, ensure that moto server scripts are running and S3 setup has completed before pressing any key to continue.");
+            Console.WriteLine("Starting application, ensure that moto server scripts are running and S3 setup has completed before pressing Enter to continue.");
             Console.ReadLine();
 
             List<S3Object> s3Items = [];
@@ -49,23 +49,13 @@ public class S3Processor : BaseProcessor, IProcessor
 
                 try
                 {
-                    ParseResult result;
-                    using (var stream = await this.FileDownloader.GetStream(file.Key))
-                    {
-                        result = await this.Parser.ParseStreamAsync(stream, file.Key);
-                    }
+                    var stream = await this.FileDownloader.GetStream(file.Key);
 
-                    if (result is null)
-                    {
-                        Console.WriteLine("Parse result is null");
-                        return;
-                    }
-                    else
-                    {
-                        this.Validate(result);
+                    //  await this.ProcessFile(new LocalFileProvider(file));
+                    var fi = new StreamFileProvider(stream, file.Key);
+                    await this.ProcessFile(fi);
 
-                        await this.Save(result);
-                    }
+                    stream?.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -109,6 +99,6 @@ public class S3Processor : BaseProcessor, IProcessor
             WorkingDirectory = Path.GetFullPath(Path.GetDirectoryName(batchFileLocation)!),
         };
 
-        return Process.Start(psi);
+        return System.Diagnostics.Process.Start(psi);
     }
 }

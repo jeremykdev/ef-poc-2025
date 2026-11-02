@@ -16,10 +16,12 @@ public class LocalFileProcessor : BaseProcessor, IProcessor
         this._fileMover = fileMover;
     }
 
-    public async Task ProcessAsync()
+    
+    public async Task Process()
     {
         try
         {
+            Console.WriteLine($"Startng process for local files in {SourceFolder}");
             var files = Directory.GetFiles(SourceFolder);
 
             if (files is null || !files.Any())
@@ -29,26 +31,14 @@ public class LocalFileProcessor : BaseProcessor, IProcessor
             }
 
             Console.WriteLine($"Found {files.Length} files to process");
-
-
-            
+                        
             foreach (var file in files)
             {
                 Console.WriteLine("===========================");
                 Console.WriteLine($"Start processing file: {Path.GetFileName(file)}");
 
-                ParseResult result = await this.Parser.ParseFileAsync(file);
-
-                if (result is null)
-                {
-                    Console.WriteLine("Parse result is null");
-                    continue;
-                }
-
-                this.Validate(result);
-
-                await this.Save(result);
-
+                await this.ProcessFile(new LocalFileProvider(file));
+                                
                 string destination = this._fileMover.MoveCompletedFile(file);
                 Console.WriteLine($"File moved to {destination}");              
             }

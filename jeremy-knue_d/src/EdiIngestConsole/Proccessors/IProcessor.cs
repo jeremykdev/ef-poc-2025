@@ -2,5 +2,5 @@
 
 public interface IProcessor
 {
-    Task ProcessAsync();
+    Task Process();
 }

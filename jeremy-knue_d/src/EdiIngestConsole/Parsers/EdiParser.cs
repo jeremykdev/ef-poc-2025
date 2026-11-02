@@ -25,10 +25,28 @@ public class EdiParser : IEdiParser
     protected const string TemplateName = "EdiFabric.Templates.Hipaa";
 
     public EdiParser()
-	{
-		string? licenseKey = Environment.GetEnvironmentVariable("EDI_KEY");
+    {
+        string? licenseKey = Environment.GetEnvironmentVariable("EDI_KEY");
         License.SetSerial(licenseKey);
     }
+
+    public async Task<ParseResult> ParseFileProviderAsync(IFileProvider fileProvider)
+    {
+        ArgumentNullException.ThrowIfNull(fileProvider);
+
+        using var stream = fileProvider.GetStream(true);
+        return await this.ParseStreamAsync(stream, fileProvider.GetFileName());
+    }
+
+
+    public ParseResult ParseFileProvider(IFileProvider fileProvider)
+    {
+        ArgumentNullException.ThrowIfNull(fileProvider);
+        using var stream = fileProvider.GetStream(false);
+        return this.ParseStream(stream, fileProvider.GetFileName());
+    }
+
+
 
     public async Task<ParseResult> ParseStreamAsync(Stream stream, string? filename = null)
     {
@@ -37,7 +55,7 @@ public class EdiParser : IEdiParser
         using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
         {
             while (await ediReader.ReadAsync())
-                ediItems.Enqueue(ediReader.Item);            
+                ediItems.Enqueue(ediReader.Item);
         }
 
         var parseResult = this.CreateParseResultFromEdiItems(ediItems);
@@ -50,26 +68,10 @@ public class EdiParser : IEdiParser
 
     }
 
-    /*
-    public async Task<ParseResult> ParseStreamAsync(Stream stream)
-    {
-        List<IEdiItem>? ediItems;
-        
-        using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
-        {
-            ediItems = (await ediReader.ReadToEndAsync())?
-                        .Where(x => x is not null)?
-                        .ToList();            
-        }
-
-        return this.CreateParseResultFromEdiItems(ediItems);
-    }
-    */
-
 
     public ParseResult ParseStream(Stream stream, string? filename = null)
     {
-       List<IEdiItem>? ediItems;
+        List<IEdiItem>? ediItems;
 
         using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
         {
@@ -81,13 +83,14 @@ public class EdiParser : IEdiParser
 
         var parseResult = this.CreateParseResultFromEdiItems(ediItems);
         parseResult.SourceHash = CreateHashFromStream(stream);
-        
-        if(!String.IsNullOrWhiteSpace(filename)) 
+
+        if (!String.IsNullOrWhiteSpace(filename))
             parseResult.SourceFileName = filename;
-        
+
         return parseResult;
     }
 
+    [Obsolete]
     public async Task<ParseResult> ParseFileAsync(string filename)
     {
         ArgumentNullException.ThrowIfNull(filename);
@@ -111,12 +114,13 @@ public class EdiParser : IEdiParser
         return result;
     }
 
+    [Obsolete]
     public ParseResult ParseFile(string filename)
     {
         ArgumentNullException.ThrowIfNull(filename);
 
         if (!File.Exists(filename))
-           throw new FileNotFoundException(filename);
+            throw new FileNotFoundException(filename);
 
         string hash = CreateHash(filename);
 
@@ -133,11 +137,11 @@ public class EdiParser : IEdiParser
 
         return result;
     }
-    
+
 
     private static string CreateHash(string filename)
     {
-        using Stream stream = File.OpenRead(filename);         
+        using Stream stream = File.OpenRead(filename);
         return CreateHashFromStream(stream);
     }
 
@@ -190,20 +194,28 @@ public class EdiParser : IEdiParser
         return new()
         {
             Success = true,
-            Message= String.Empty,
+            Message = String.Empty,
             EdiItems = ediItems.ToList(),
         };
     }
 
+    
 }
 
 
 public interface IEdiParser
 {
+    [Obsolete]
     ParseResult ParseFile(string filename);
+
+    [Obsolete]
     Task<ParseResult> ParseFileAsync(string filename);
 
     Task<ParseResult> ParseStreamAsync(Stream stream, string? filename = null);
 
     ParseResult ParseStream(Stream stream, string? filename = null);
+
+    Task<ParseResult> ParseFileProviderAsync(IFileProvider fileProvider);
+
+    ParseResult ParseFileProvider(IFileProvider fileProvider);
 }

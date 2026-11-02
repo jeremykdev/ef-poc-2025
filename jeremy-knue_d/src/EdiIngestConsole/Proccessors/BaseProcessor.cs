@@ -3,7 +3,6 @@ using EdiIngestConsole.Data;
 using EdiIngestConsole.FileManagement;
 using EdiIngestConsole.Parsers;
 using EdiIngestConsole.Validations;
-using Superpower.Model;
 
 namespace EdiIngestConsole.Proccessors;
 
@@ -25,6 +24,24 @@ public abstract class BaseProcessor
         this.DataService = dataService;
         this.FileDownloader = fileDownloader;
         this.Validator = validator;
+    }
+
+     
+
+    public async Task ProcessFile(IFileProvider fileProvider)
+    {        
+        ParseResult result = await this.Parser.ParseFileProviderAsync(fileProvider);
+
+        if (result is null)
+        {
+            Console.WriteLine("Parse result is null");
+            return;
+        }
+
+        this.Validate(result);
+
+        await this.Save(result);
+
     }
 
     public async Task<int> Save(ParseResult parseResult)
