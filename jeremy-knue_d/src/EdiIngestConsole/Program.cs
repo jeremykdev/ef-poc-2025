@@ -16,6 +16,10 @@ namespace EdiIngestConsole;
 /// </summary>
 public class Program
 {
+    // keys for AWS S3 vs LocalFile
+    private const string KeyS3 = "S3";
+    private const string KeyLocalFile = "Local";
+
     static async Task Main(string[] args)
     {
         Env.Load();
@@ -28,120 +32,40 @@ public class Program
         services.AddTransient<IFileMover, FileMover>();
         services.AddTransient<IFileDownloader, AwsFileDownloader>();
         services.AddTransient<IValidator, Validator>();
-        services.AddTransient<IProcessor, S3Processor>();
+        services.AddKeyedTransient<IProcessor, S3Processor>(KeyS3);
+        services.AddKeyedTransient<IProcessor, LocalFileProcessor>(KeyLocalFile);
 
         var provider = services.BuildServiceProvider();
 
-        IEdiParser parser = provider.GetService<IEdiParser>()!;
-        IDataService dataService = provider.GetService<IDataService>()!;
-        IFileMover fileMover = provider.GetService<IFileMover>()!;
-        IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
-        IValidator validator = provider.GetService<IValidator>()!;
-
-        // TODO: use keyed services or other option to switch between 
-        // s3 and local file processing
-        IProcessor processor = provider.GetService<IProcessor>()!;
+        string processorKey = GetProcessorKey();
+        IProcessor processor = provider.GetRequiredKeyedService<IProcessor>(processorKey);
         await processor.ProcessAsync();
-
-        /*
-        List<S3Object> s3Items = [];
-
-        try
-        {
-            s3Items = await fileDownloader.List3Objects();
-
-            if (s3Items is null || s3Items.Count == 0)
-            {
-                Console.WriteLine("No files found on server");
-                Console.WriteLine("Press any key to exit");
-                Environment.Exit(0);
-            }
-        }
-        catch(Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-
-        Console.WriteLine($"Found {s3Items.Count} files to process");
-
-        foreach (var file in s3Items)
-        {
-            Console.WriteLine("===========================");
-            Console.WriteLine($"Start processing file/object: {file.Key}");
-
-            try
-            {                
-                ParseResult result;
-                using (var stream = await fileDownloader.GetStream(file.Key))
-                {
-                    result = await parser.ParseStreamAsync(stream, file.Key);
-                }
-
-                if (result is null)
-                    Console.WriteLine("Parse result is null");
-                else
-                {
-                    ValidationResult? validationResult = null;
-                    Console.WriteLine($"{result.EdiItems.Count} items parsed.");
-                    Console.WriteLine($"Hash: {result.SourceHash}");
-                    foreach (var item in result.EdiItems)
-                    {
-                        Console.WriteLine(item);
-
-                        if (item is EdiMessage)
-                        {
-                            Console.WriteLine($"validating EdiMessage {item.GetType()} ...");
-                            validationResult = validator.Validate(item as EdiMessage);
-
-                            result.ValidationResults.Add(validationResult);
-
-                            var consoleColor = validationResult.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
-                            Console.ForegroundColor = consoleColor;
-                            Console.WriteLine(validationResult.ToString('\n'));
-                            Console.ResetColor();
-                        }
-                        else if (item is ControlSegment)
-                        {
-                            Console.WriteLine($"validating ControlSegment {item.GetType()}...");
-                            validationResult = validator.Validate(item as ControlSegment);
-
-                            result.ValidationResults.Add(validationResult);
-
-                            var consoleColor = validationResult.IsValid() ? ConsoleColor.Green : ConsoleColor.Red;
-                            Console.ForegroundColor = consoleColor;
-                            Console.WriteLine(validationResult.ToString('\n'));
-                            Console.ResetColor();
-                        }
-                    }
-
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                   
-                    
-                    Console.WriteLine("Preparing to save data");
-                    int count = await dataService!.SaveItems(result);
-
-                    Console.WriteLine($"Number of items saved: {count}");
-                     
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-        }
-        */
 
         Console.WriteLine("Press any key to exit");
         Console.ReadKey();
         Environment.Exit(0);
     }
 
+    /// <summary>
+    /// Get the key to use for IProcessor DI resolution
+    /// </summary>
+    /// <remarks>
+    /// One of the key values for AWS S3 vs LocalFile expected to exist in environment variable "PROCESSOR_KEY"
+    /// If not found will default to LocalFile 
+    /// </remarks>
+    private static string GetProcessorKey()
+    {
+        string envValue = Environment.GetEnvironmentVariable("PROCESSOR_KEY") ?? String.Empty;
 
-    
+
+        if (envValue == KeyLocalFile)
+            return KeyLocalFile;
+
+        if (envValue == KeyS3)
+            return KeyS3;
+
+        Console.WriteLine($"PROCESSOR_KEY {envValue} does not match any valid keys.  Will use default");
+        return KeyLocalFile;
+    }
 
 }

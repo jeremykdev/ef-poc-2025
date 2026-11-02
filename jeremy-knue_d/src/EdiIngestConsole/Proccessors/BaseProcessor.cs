@@ -11,7 +11,6 @@ public abstract class BaseProcessor
 {
     protected readonly IEdiParser Parser;
     protected readonly IDataService DataService;
-
     protected readonly IFileDownloader FileDownloader;
     protected readonly IValidator Validator;
 

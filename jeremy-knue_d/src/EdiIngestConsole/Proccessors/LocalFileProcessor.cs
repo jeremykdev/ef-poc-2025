@@ -1,5 +1,4 @@
-﻿using EdiFabric.Core.Model.Edi;
-using EdiIngestConsole.Data;
+﻿using EdiIngestConsole.Data;
 using EdiIngestConsole.FileManagement;
 using EdiIngestConsole.Parsers;
 using EdiIngestConsole.Validations;
@@ -37,7 +36,6 @@ public class LocalFileProcessor : BaseProcessor, IProcessor
             {
                 Console.WriteLine("===========================");
                 Console.WriteLine($"Start processing file: {Path.GetFileName(file)}");
-
 
                 ParseResult result = await this.Parser.ParseFileAsync(file);
 
