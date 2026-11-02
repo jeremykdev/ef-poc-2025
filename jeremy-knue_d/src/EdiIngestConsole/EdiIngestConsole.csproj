@@ -23,19 +23,28 @@
     <None Update=".env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="837-fails-snip2.txt">
+    <None Update="EdiFiles\837-custom-code-pass-snip5.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="837-fails-snip4.txt">
+    <None Update="EdiFiles\837-fails-snip2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="837-malformed.txt">
+    <None Update="EdiFiles\837-fails-snip4.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="837-fail-snip3.txt">
+    <None Update="EdiFiles\837-fails-snip6-customIEA-validation.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Empty.txt">
+    <None Update="EdiFiles\837-malformed.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EdiFiles\837-fail-snip3.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EdiFiles\837.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EdiFiles\Empty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Scripts\setup-s3.bat">
