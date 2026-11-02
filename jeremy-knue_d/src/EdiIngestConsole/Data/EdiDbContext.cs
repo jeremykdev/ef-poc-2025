@@ -4,7 +4,7 @@ using EdiFabric.Templates.Hipaa5010;
 using EdiFabric.Core.Model.Edi.X12;
 using EdiIngestConsole.Models;
 
-namespace EdiIngestConsole;
+namespace EdiIngestConsole.Data;
 
 /// <summary>
 /// EF database context

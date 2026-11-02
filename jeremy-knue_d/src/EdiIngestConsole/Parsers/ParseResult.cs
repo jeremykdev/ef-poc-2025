@@ -1,6 +1,6 @@
 ﻿using EdiFabric.Core.Model.Edi;
 
-namespace EdiIngestConsole;
+namespace EdiIngestConsole.Parsers;
 
 public class ParseResult
 {

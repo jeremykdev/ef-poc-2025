@@ -1,6 +1,7 @@
 using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.X12;
-using EdiIngestConsole;
+using EdiIngestConsole.Data;
+using EdiIngestConsole.Parsers;
 using Moq;
 
 namespace EdiIngestConsoleTests;

@@ -5,7 +5,7 @@ using Amazon.S3.Transfer;
 using Azure.Core;
 using System.Collections.Concurrent;
 
-namespace EdiIngestConsole;
+namespace EdiIngestConsole.FileManagement;
 
 /// <summary>
 /// Downloads files from AWS

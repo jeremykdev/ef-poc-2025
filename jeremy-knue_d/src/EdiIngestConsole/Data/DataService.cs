@@ -4,8 +4,9 @@ using EdiFabric.Templates.Hipaa5010;
 using EdiIngestConsole.Models;
 using Microsoft.EntityFrameworkCore;
 using EdiIngestConsole.Validations;
+using EdiIngestConsole.Parsers;
 
-namespace EdiIngestConsole;
+namespace EdiIngestConsole.Data;
 
 /// <summary>
 /// Data service wraps EF db context with logic to handle IEdiItems

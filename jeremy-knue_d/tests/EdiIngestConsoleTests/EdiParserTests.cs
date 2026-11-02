@@ -1,5 +1,5 @@
 ﻿using DotNetEnv;
-using EdiIngestConsole;
+using EdiIngestConsole.Parsers;
 using System.Text;
 
 namespace EdiIngestConsoleTests;

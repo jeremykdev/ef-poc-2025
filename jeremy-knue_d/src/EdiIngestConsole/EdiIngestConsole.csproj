@@ -51,6 +51,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Proccessors\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
 </Project>

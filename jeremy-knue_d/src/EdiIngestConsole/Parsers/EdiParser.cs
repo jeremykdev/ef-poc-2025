@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EdiIngestConsole;
+namespace EdiIngestConsole.Parsers;
 
 /// <summary>
 /// Parse 837 EDI file

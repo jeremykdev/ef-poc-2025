@@ -1,4 +1,5 @@
-﻿using EdiIngestConsole.Validations;
+﻿using EdiIngestConsole.Parsers;
+using EdiIngestConsole.Validations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;

@@ -1,6 +1,4 @@
-﻿namespace EdiIngestConsole;
-
-
+﻿namespace EdiIngestConsole.FileManagement;
 
 public class FileMover : IFileMover
 {
