@@ -4,6 +4,7 @@ using EdiFabric.Core.Model.Edi;
 using EdiIngestConsole.Data;
 using EdiIngestConsole.FileManagement;
 using EdiIngestConsole.Parsers;
+using EdiIngestConsole.Proccessors;
 using EdiIngestConsole.Validations;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
@@ -32,6 +33,7 @@ internal class Program
         services.AddTransient<IFileMover, FileMover>();
         services.AddTransient<IFileDownloader, AwsFileDownloader>();
         services.AddTransient<IValidator, Validator>();
+        services.AddTransient<IProcessor, S3Processor>();
 
         var provider = services.BuildServiceProvider();
 
@@ -41,6 +43,12 @@ internal class Program
         IFileDownloader fileDownloader = provider.GetService<IFileDownloader>()!;
         IValidator validator = provider.GetService<IValidator>()!;
 
+        // TODO: use keyed services or other option to switch between 
+        // s3 and local file processing
+        IProcessor processor = provider.GetService<IProcessor>()!;
+        await processor.ProcessAsync();
+
+        /*
         List<S3Object> s3Items = [];
 
         try
@@ -131,8 +139,8 @@ internal class Program
             Console.WriteLine("");
             Console.WriteLine("");
         }
+        */
 
-        Console.WriteLine("You can now close the moto-server window to stop the server");
         Console.WriteLine("Press any key to exit");
         Console.ReadKey();
         Environment.Exit(0);
