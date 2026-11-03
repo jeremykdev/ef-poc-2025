@@ -9,9 +9,11 @@ namespace EdiIngestConsole.Proccessors;
 
 public class S3Processor : BaseProcessor, IProcessor
 {
-    public S3Processor(IEdiParser parser, IDataService dataService, IFileDownloader fileDownloader, IValidator validator) : base(parser, dataService, fileDownloader, validator)
-    {
+    protected readonly IFileDownloader _fileDownloader;
 
+    public S3Processor(IEdiParser parser, IDataService dataService, IValidator validator, IFileDownloader fileDownloader) : base(parser, dataService, validator)
+    {
+        this._fileDownloader = fileDownloader;
     }
 
     public async Task Process()
@@ -27,7 +29,7 @@ public class S3Processor : BaseProcessor, IProcessor
 
             try
             {
-                s3Items = await this.FileDownloader.List3Objects();
+                s3Items = await this._fileDownloader.List3Objects();
 
                 if (s3Items is null || s3Items.Count == 0)
                 {
@@ -49,7 +51,7 @@ public class S3Processor : BaseProcessor, IProcessor
 
                 try
                 {
-                    var stream = await this.FileDownloader.GetStream(file.Key);
+                    var stream = await this._fileDownloader.GetStream(file.Key);
 
                     //  await this.ProcessFile(new LocalFileProvider(file));
                     var fi = new StreamFileProvider(stream, file.Key);

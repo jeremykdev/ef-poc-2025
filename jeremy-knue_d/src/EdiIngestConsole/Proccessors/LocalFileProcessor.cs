@@ -11,7 +11,7 @@ public class LocalFileProcessor : BaseProcessor, IProcessor
 
     private readonly IFileMover _fileMover;
 
-    public LocalFileProcessor(IEdiParser parser, IDataService dataService, IFileDownloader fileDownloader, IValidator validator, IFileMover fileMover) : base(parser, dataService, fileDownloader, validator)
+    public LocalFileProcessor(IEdiParser parser, IDataService dataService,  IValidator validator, IFileMover fileMover) : base(parser, dataService, validator)
     {
         this._fileMover = fileMover;
     }

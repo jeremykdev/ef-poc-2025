@@ -16,13 +16,11 @@ public abstract class BaseProcessor
     protected BaseProcessor(
         IEdiParser parser,
         IDataService dataService,
-        IFileDownloader fileDownloader,
         IValidator validator
     )
     {
         this.Parser = parser;
         this.DataService = dataService;
-        this.FileDownloader = fileDownloader;
         this.Validator = validator;
     }
 
