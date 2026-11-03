@@ -65,15 +65,27 @@ Examples for both files above can be found in the samples directory.  Note that 
 
 3) Here are the example files that can used by the project to process:
 837.txt - a valid 837 file
+
 Empty.txt - a blank text file
+
 837-malformed.txt - a malformed EDI file
+
 837-fails-snip2.txt - same as 837.txt but edited BHT record on line 4 to change valid 'CH' to invalid code 'ZZ'.  This causes it to fail SNIP level 2 validation.
+
 837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
+
 837-fail-snip4.txt - same as 837.txt but edited to cause Paired attribute validation to fail on DMG segment on line 18, note this passes SNIP 3 validation in online EDINation validator but fails SNIP3 running in this program.
+
 837-custom-code-pass-snip5.txt - same as 837.txt but edited to change 0019 in BHT to TEST, this 'TEST' value has been added to the validation settings as a valid value for BHT, otherwise that file fails SNIP validation such as in online EDInation validator.
+
 837-fails-snip6-customIEA-validation.txt - same as 837.txt to change IEA segment to fail custom validation
 
-To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name.
+837-custom-snip7.txt - same as 837.txt but edited to added an extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this passes custom validation for SNIP 7
+
+837-custom-snip7-fails.txt  - same as 837.txt but edited to have empty extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this fails custom validation for SNIP 7
+
+
+To process another file ensure that a copy is written to the output directory and set the filename variable to the file's name when running local files OR modify batch Scripts/setup-s3.bat when using S3 and moto server to upload the file to mock s3.
 
 
 ==========================================
