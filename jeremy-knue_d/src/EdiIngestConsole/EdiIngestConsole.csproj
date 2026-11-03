@@ -41,6 +41,9 @@
     <None Update="EdiFiles\837-fail-snip3.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Update="EdiFiles\837-custom-snip7-fails.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="EdiFiles\837.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

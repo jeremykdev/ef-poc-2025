@@ -2,6 +2,7 @@
 using EdiFabric.Core.Model.Edi;
 using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Framework.Readers;
+using EdiIngestConsole.Models;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,7 +23,9 @@ public class EdiParser : IEdiParser
         LeaveOpen = true, // don't close stream, leave open so it can be read again to create hash
     };
 
-    protected const string TemplateName = "EdiFabric.Templates.Hipaa";
+    protected const string DefaultTemplateName = "EdiFabric.Templates.Hipaa";
+
+    protected const string Custom837PTemplateName = "EdiIngestConsole";
 
     public EdiParser()
     {
@@ -52,7 +55,14 @@ public class EdiParser : IEdiParser
     {
         ConcurrentQueue<IEdiItem> ediItems = [];
 
-        using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
+        string template = DefaultTemplateName;
+
+        if (filename is not null &&
+            Path.GetFileNameWithoutExtension(filename).Contains("837-custom-snip7")
+            )
+            template = Custom837PTemplateName;
+
+        using (var ediReader = new X12Reader(stream, template, this._defaultX12ReaderSettings))
         {
             while (await ediReader.ReadAsync())
                 ediItems.Enqueue(ediReader.Item);
@@ -64,6 +74,23 @@ public class EdiParser : IEdiParser
         if (!String.IsNullOrWhiteSpace(filename))
             parseResult.SourceFileName = filename;
 
+        // for demonstrating that we have a custom class for SNIP7
+        // dump the ExtraPayload value from instance of custom BHT
+        // when using custom template
+        if (template.Equals(Custom837PTemplateName))
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Used custom template for 837 and BHT");
+           
+             string extraPayload = ediItems.OfType<TS837PCustom>()?
+                                      .FirstOrDefault()?
+                                      .BHT_BeginningOfHierarchicalTransaction?
+                                      .ExtraPayload ?? "{NOT FOUND}";
+
+            Console.WriteLine($"Extra Payload: {extraPayload}");
+            Console.ResetColor();
+        }
+
         return parseResult;
 
     }
@@ -73,7 +100,7 @@ public class EdiParser : IEdiParser
     {
         List<IEdiItem>? ediItems;
 
-        using (var ediReader = new X12Reader(stream, TemplateName, this._defaultX12ReaderSettings))
+        using (var ediReader = new X12Reader(stream, DefaultTemplateName, this._defaultX12ReaderSettings))
         {
             ediItems = ediReader
                         .ReadToEnd()?
