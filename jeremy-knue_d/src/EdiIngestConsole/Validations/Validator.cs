@@ -2,7 +2,6 @@
 using EdiFabric.Core.Model.Edi.ErrorContexts;
 using EdiFabric.Core.Model.Edi.X12;
 using EdiIngestConsole.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EdiIngestConsole.Validations;
 
