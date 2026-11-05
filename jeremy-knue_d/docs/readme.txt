@@ -190,19 +190,33 @@ In EdiFiles folder set the following to Copy to Output Directory = Copy Always. 
 001-837.txt - a valid 837 file
 Expect pass validation
 
-837-fails-snip2.txt - same as 837.txt but edited BHT record on line 4 to change valid 'CH' to invalid code 'ZZ'.  This causes it to fail SNIP level 2 validation.
+837-fails-snip2.txt - same as 837.txt but edited 
+BHT record on line 4 to change valid 'CH' to invalid code 'ZZ'.  
+This causes it to fail SNIP level 2 validation.
 Expect fail validation
 
-837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
+837-fail-snip3.txt - same as 837.txt but edited 
+to cause mismatch between service amount and claim total.  
+This causes it to fail SNIP level 3 validation.
 Expect fail validation
 
-837-custom-code-pass-snip5.txt - same as 837.txt but edited to change 0019 in BHT to TEST, this 'TEST' value has been added to the validation settings as a valid value for BHT, otherwise that file fails SNIP validation such as in online EDInation validator.
+837-custom-code-pass-snip5.txt - same as 837.txt but edited 
+to change 0019 in BHT to TEST, 
+this 'TEST' value has been added to the validation settings 
+as a valid value for BHT, 
+otherwise that file fails SNIP validation such as in online EDInation validator.
 Expect pass validation
 
-837-fails-snip6-customIEA-validation.txt - same as 837.txt to change IEA segment to fail custom validation. IEdiValidator was added to custom class to cause failure when InterchangeControlNumberMustEndWith does not end with "101".
+837-fails-snip6-customIEA-validation.txt - same as 837.txt to change 
+IEA segment to fail custom validation. 
+IEdiValidator was added to custom class to cause failure 
+when InterchangeControlNumberMustEndWith does not end with "101".
 Expect fail validation
 
-837-custom-snip7.txt - same as 837.txt but edited to added an extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this passes custom validation for SNIP 7
+837-custom-snip7.txt - same as 837.txt but edited to 
+add an extra property to end of BHT, the "ExtraPayload".  
+Parsed with custom classes (see Models) this passes custom validation
+for SNIP 7
 Expect pass validation. Will also output the custom extra payload value
 
 837-custom-snip7-fails.txt  - same as 837.txt but edited to have empty extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this fails custom validation for SNIP 7
