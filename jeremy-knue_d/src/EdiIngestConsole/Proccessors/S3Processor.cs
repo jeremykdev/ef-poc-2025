@@ -51,13 +51,11 @@ public class S3Processor : BaseProcessor, IProcessor
 
                 try
                 {
-                    var stream = await this._fileDownloader.GetStream(file.Key);
+                    using var stream = await this._fileDownloader.GetStream(file.Key);
 
                     //  await this.ProcessFile(new LocalFileProvider(file));
                     var fi = new StreamFileProvider(stream, file.Key);
-                    await this.ProcessFile(fi);
-
-                    stream?.Dispose();
+                    await this.ProcessFile(fi);                    
                 }
                 catch (Exception ex)
                 {
