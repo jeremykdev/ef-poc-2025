@@ -67,6 +67,9 @@ public class Validator : IValidator
             DataElementCodesMap = codeSetMap
         };
 
+        Console.WriteLine($"Using validation level: {settings.ValidationLevel} for messages");
+
+
         bool isValid = message.IsValid(out MessageErrorContext? errorContext, settings);
 
         if (isValid)
@@ -87,7 +90,6 @@ public class Validator : IValidator
             if (Enum.IsDefined<ValidationLevel>((ValidationLevel)result))
             {
                 var foundLevel = (ValidationLevel)result;
-                Console.WriteLine($"Using validation level: {foundLevel}");
                 return foundLevel;
             }
         }
