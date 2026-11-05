@@ -32,7 +32,7 @@ public class LocalFileProcessor : BaseProcessor, IProcessor
 
             Console.WriteLine($"Found {files.Length} files to process");
                         
-            foreach (var file in files)
+            foreach (var file in files.OrderBy(x => x))
             {
                 Console.WriteLine("===========================");
                 Console.WriteLine($"Start processing file: {Path.GetFileName(file)}");

@@ -23,34 +23,34 @@
     <None Update=".env">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-custom-code-pass-snip5.txt">
+    <None Update="EdiFiles\005-837-custom-code-pass-snip5.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-custom-snip7.txt">
+    <None Update="EdiFiles\071-837-custom-snip7.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-fail-snip3.txt">
+    <None Update="EdiFiles\003-837-fail-snip3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-fails-snip2.txt">
+    <None Update="EdiFiles\002-837-fails-snip2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\837-fails-snip4.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-fails-snip6-customIEA-validation.txt">
+    <None Update="EdiFiles\006-837-fails-snip6-customIEA-validation.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\837-malformed.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837-custom-snip7-fails.txt">
+    <None Update="EdiFiles\072-837-custom-snip7-fails.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\837-PER-paried-item-missing.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="EdiFiles\837.txt">
+    <None Update="EdiFiles\001-837.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\Empty.txt">
