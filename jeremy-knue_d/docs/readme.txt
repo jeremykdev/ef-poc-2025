@@ -38,6 +38,7 @@ S3_BUCKET_NAME={bucket name}
 S3_SERVICE_URL={AWS mock URL}
 SNIP_VALIDATION_LEVEL={SNIP validation level}
 PROCESSOR_KEY={Use 'Local' for processing local files or 'S3' for moto/S3 files, value is case insenstive}
+SAVE_ENABLED={Boolean for is save enabled.  Defaults to true if setting omitted or value cannot be parsed as a boolean}
 ======================================
 
 Example file content ======================================
@@ -51,6 +52,7 @@ S3_BUCKET_NAME=EdiDemo
 S3_SERVICE_URL=http://127.0.0.1:5000
 SNIP_VALIDATION_LEVEL=2
 PROCESSOR_KEY=local
+SAVE_ENABLED=true
 ======================================
 
 
@@ -96,6 +98,8 @@ Unit tests
 1) The EdiParser class depends on a valid license key for EdiFabric existing in the enviroment variable. EDI_KEY
 When testing open the class EdiParserTests and ensure that the Setup method has the path to an .env file containing the key.
 
+
+==========================================
 
 PHASE 2 
 
@@ -144,4 +148,53 @@ Watch those windows and wait on continuing the console application until the ser
 
 
 
+==========================================
+
+PHASE 3 
+
+Phase 3 demonstrates SNIP (Strategic National Implementation Process) validation.
+
+Level 1 - This is the base out of box logic provided by the EDI reader.  No changes needed to support this level.
+
+Level 2 - Checks values against validation attributes in templates such as for Required values.
+
+Level 3 - Checks that line item and total values are valid, such as checking that sum of service line item amounts and claim total amount match.
+
+Level 4 - Checks values on a segment that are related to each other, such as checking that if a contact information segment specifies contact method type of telephone that a value is also provided for the telephone number.
+ 
+Level 5 - Checks that valid codes are provided such as checking that the first value in a BHT segment is '0019'.
+
+Level 6 - Additional checks for valid codes to comply with HIPAA rules.
+
+Level 7 - Checks customized business rules beyond what the X12 standard supports out of the box.
+
+See: https://www.edifabric.com/docs/edifabric-net/how-to-validate-hipaa-snip-levels.html
+
+
+
+==========================================
+
+
+Setup for Phase 3 demo
+
+
+In env set 
+SAVE_ENABLED=false - keep focus on validation
+SNIP_VALIDATION_LEVEL=3 - this is SNIP level 4
+PROCESSOR_KEY=local 
+
+In EdiFiles folder set the following to Copy to Output Directory = Copy Always. Others should be set to Do Not Copy
+837.txt - a valid 837 file
+
+837-fails-snip2.txt - same as 837.txt but edited BHT record on line 4 to change valid 'CH' to invalid code 'ZZ'.  This causes it to fail SNIP level 2 validation.
+
+837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
+
+837-custom-code-pass-snip5.txt - same as 837.txt but edited to change 0019 in BHT to TEST, this 'TEST' value has been added to the validation settings as a valid value for BHT, otherwise that file fails SNIP validation such as in online EDInation validator.
+
+837-fails-snip6-customIEA-validation.txt - same as 837.txt to change IEA segment to fail custom validation. IEdiValidator was added to custom class to cause failure when InterchangeControlNumberMustEndWith does not end with "101".
+
+837-custom-snip7.txt - same as 837.txt but edited to added an extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this passes custom validation for SNIP 7
+
+837-custom-snip7-fails.txt  - same as 837.txt but edited to have empty extra property to end of BHT, the "ExtraPayload".  Parsed with custom classes (see Models) this fails custom validation for SNIP 7
 

@@ -12,8 +12,6 @@ namespace EdiIngestConsole.Models;
 /// <remarks>Demostrates SNIP level 6 validation</remarks>
 public class IeaCustom : IEA, IEdiValidator
 {
-
-
     protected const string InterchangeControlNumberMustEndWith = "101";
 
     public IeaCustom()

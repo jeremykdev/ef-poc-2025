@@ -43,7 +43,13 @@ public abstract class BaseProcessor
     }
 
     public async Task<int> Save(ParseResult parseResult)
-    {
+    { 
+        if (!this.IsSaveEnabled())
+        {
+            Console.WriteLine("Saving is disabled. Skipping data persistence.");
+            return 0;
+        }
+
         Console.WriteLine("Preparing to save data");
         int count = await this.DataService!.SaveItems(parseResult);
 
@@ -90,6 +96,24 @@ public abstract class BaseProcessor
         Console.WriteLine("");
         Console.WriteLine("");
 
+    }
+
+    /// <summary>
+    /// Check if saving data is enabled
+    /// </summary>
+    /// <remarks>
+    /// Depends on enviroment variable named "SAVE_ENABLED".
+    /// Defaults to true if setting omitted or value cannot be parsed as a boolean
+    /// </remarks>
+    /// <returns></returns>
+    private bool IsSaveEnabled()
+    {
+        string envValue = Environment.GetEnvironmentVariable("SAVE_ENABLED") ?? "";
+
+        if (Boolean.TryParse(envValue, out var result))
+            return result;
+
+        return true;
     }
 
 }
