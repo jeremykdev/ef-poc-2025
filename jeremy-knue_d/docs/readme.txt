@@ -37,7 +37,7 @@ AWS_SECRET_ACCESS_KEY={credential value}
 S3_BUCKET_NAME={bucket name}
 S3_SERVICE_URL={AWS mock URL}
 SNIP_VALIDATION_LEVEL={SNIP validation level}
-
+PROCESSOR_KEY={Use 'Local' for processing local files or 'S3' for moto/S3 files, value is case insenstive}
 ======================================
 
 Example file content ======================================
@@ -50,13 +50,14 @@ AWS_SECRET_ACCESS_KEY=DummyValue2
 S3_BUCKET_NAME=EdiDemo
 S3_SERVICE_URL=http://127.0.0.1:5000
 SNIP_VALIDATION_LEVEL=2
-
+PROCESSOR_KEY=local
 ======================================
 
 
 
 
-2) Put a 837 edi file named "837.txt" in the in the same directory as the console exe file.
+2) When running locally go to the EdiFiles directory and for any files to process set the build action to Copy Only so they are copied to bin folder.  See Phase 3 section for notes on running with the S3 processor.
+
 This is currently done automatically by copying the file to the output directory in Visual Studio.
 
 
