@@ -58,9 +58,6 @@ PROCESSOR_KEY=local
 
 2) When running locally go to the EdiFiles directory and for any files to process set the build action to Copy Only so they are copied to bin folder.  See Phase 3 section for notes on running with the S3 processor.
 
-This is currently done automatically by copying the file to the output directory in Visual Studio.
-
-
 Examples for both files above can be found in the samples directory.  Note that the .env file in samples has been named "sample.env.txt" to all the file to be included in git commits.  Normally .env files are ignored by git.
 
 
@@ -76,6 +73,8 @@ Empty.txt - a blank text file
 837-fail-snip3.txt - same as 837.txt but edited to cause mismatch between service amount and claim total.  This causes it to fail SNIP level 3 validation.
 
 837-fail-snip4.txt - same as 837.txt but edited to cause Paired attribute validation to fail on DMG segment on line 18, note this passes SNIP 3 validation in online EDINation validator but fails SNIP3 running in this program.
+
+837-PER-paried-item-missing.txt -  same as 837.txt but edited to cause Paired attribute validation to fail on PER segment line 6. In this case TE indicated a telephone number can be expected but none is provided.
 
 837-custom-code-pass-snip5.txt - same as 837.txt but edited to change 0019 in BHT to TEST, this 'TEST' value has been added to the validation settings as a valid value for BHT, otherwise that file fails SNIP validation such as in online EDInation validator.
 
