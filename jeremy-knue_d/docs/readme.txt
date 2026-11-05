@@ -74,7 +74,8 @@ Empty.txt - a blank text file
 
 837-fail-snip4.txt - same as 837.txt but edited to cause Paired attribute validation to fail on DMG segment on line 18, note this passes SNIP 3 validation in online EDINation validator but fails SNIP3 running in this program.
 
-837-PER-paried-item-missing.txt -  same as 837.txt but edited to cause Paired attribute validation to fail on PER segment line 6. In this case TE indicated a telephone number can be expected but none is provided.
+837-PER-paried-item-missing.txt -  same as 837.txt but edited to cause Paired attribute validation to fail on PER segment line 6. In this case TE indicated a telephone number can be expected but none is provided.  This passes SNIP 3 validation in online EDINation validator but fails SNIP3 running in this program.
+
 
 837-custom-code-pass-snip5.txt - same as 837.txt but edited to change 0019 in BHT to TEST, this 'TEST' value has been added to the validation settings as a valid value for BHT, otherwise that file fails SNIP validation such as in online EDInation validator.
 
