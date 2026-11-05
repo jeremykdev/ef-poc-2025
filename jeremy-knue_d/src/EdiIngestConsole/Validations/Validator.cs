@@ -49,9 +49,9 @@ public class Validator : IValidator
     {
         ArgumentNullException.ThrowIfNull(message);
 
-        // for testing SNIP level 5 validation will extend the valid code values
+        // for testing SNIP level 5 validation extend the valid code values
         // for BHT  hierarchical structure code which currently supports only '0019'
-        // for 837P
+        // for 837P, allow 'TEST' as a valid value
         // see: https://www.edifabric.com/docs/edifabric-net/validate-edi-with-templates.html#what-is-dataelementcodesmap
         
         var codeSetMap = new Dictionary<string, List<string>>
@@ -67,9 +67,7 @@ public class Validator : IValidator
             DataElementCodesMap = codeSetMap
         };
 
-        MessageErrorContext? errorContext = null;
-
-        bool isValid = message.IsValid(out errorContext, settings);
+        bool isValid = message.IsValid(out MessageErrorContext? errorContext, settings);
 
         if (isValid)
               return new();
