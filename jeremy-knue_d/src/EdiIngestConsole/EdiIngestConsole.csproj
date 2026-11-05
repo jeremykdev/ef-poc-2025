@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="EdiFiles\837-fail-snip3.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="4.0.104.6" />
     <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="EdiFabric" Version="11.0.0" />
@@ -31,6 +27,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\837-custom-snip7.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EdiFiles\837-fail-snip3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="EdiFiles\837-fails-snip2.txt">
@@ -73,9 +72,4 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Include="EdiFiles\837-fail-snip3.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>
-  </ItemGroup>
 </Project>
